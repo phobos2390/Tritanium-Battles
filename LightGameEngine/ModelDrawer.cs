@@ -12,30 +12,30 @@ using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Drawing.Imaging;
 
-namespace LightGameEngine
+namespace LightGameEngine.Model
 {
     class ModelDrawer
     {
         private ModelDrawer(){}
 
-        public static void Draw(ModelObject objectToDraw)
+        public static void Draw(IModelObject objectToDraw)
         {
             GL.PushMatrix();
             GL.Translate(objectToDraw.Position);
-            GL.Rotate(objectToDraw.ZRotation.Degrees, 0, 0, 1);
-            GL.Rotate(objectToDraw.XRotation.Degrees, 1, 0, 0);
-            GL.Rotate(objectToDraw.YRotation.Degrees, 0, 1, 0);
+            GL.Rotate(objectToDraw.Roll.Degrees, 0, 0, 1);
+            GL.Rotate(objectToDraw.Yaw.Degrees, 1, 0, 0);
+            GL.Rotate(objectToDraw.Pitch.Degrees, 0, 1, 0);
             foreach (Group g in objectToDraw.Groups)
             {
-                GL.Color3(g.Material.DiffuseColor.X,
-                        g.Material.DiffuseColor.Y,
-                        g.Material.DiffuseColor.Z);
                 foreach (Face f in g.Faces)
                 {
-                    GL.Begin(BeginMode.Polygon);
+                    GL.Begin(PrimitiveType.Polygon);
+                    GL.Color3(g.Material.DiffuseColor.X,
+                       g.Material.DiffuseColor.Y,
+                       g.Material.DiffuseColor.Z);
                     for (int i = 0; i < f.Count; i++)
                     {
-                        var vertex = objectToDraw.Vertices[f[i].VertexIndex];
+                        var vertex = objectToDraw.Vertices[f[i].VertexIndex - 1];
                         GL.Vertex3(vertex.X, vertex.Y, vertex.Z);
                     }
                     GL.End();

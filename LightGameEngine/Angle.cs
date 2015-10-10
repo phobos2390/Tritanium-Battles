@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -75,7 +76,7 @@ namespace LightGameEngine
 
         public static Angle ArcSine(double opposite, double hypotenuse)
         {
-            if(hypotenuse != 0 && Math.Abs(opposite) > Math.Abs(hypotenuse))
+            if(hypotenuse != 0 && Math.Abs(opposite) <= Math.Abs(hypotenuse))
             {
                 return Angle.CreateRadian(Math.Asin(opposite / hypotenuse));
             }
@@ -85,16 +86,35 @@ namespace LightGameEngine
             }
         }
 
-        public static Angle ArcCosine(double opposite, double hypotenuse)
+        public static Angle ArcCosine(double adjacent, double hypotenuse)
         {
-            if (hypotenuse != 0 && Math.Abs(opposite) > Math.Abs(hypotenuse))
+            if (hypotenuse != 0 && Math.Abs(adjacent) <= Math.Abs(hypotenuse))
             {
-                return Angle.CreateRadian(Math.Acos(opposite / hypotenuse));
+                return Angle.CreateRadian(Math.Acos(adjacent / hypotenuse));
             }
             else
             {
                 throw new DivideByZeroException();
             }
+        }
+
+        public static Vector3d ZVector(Angle pitch, Angle yaw)
+        {
+            return ZVector(pitch, yaw, 1);
+        }
+
+        public static Vector3d ZVector(Angle pitch, Angle yaw, double scalar)
+        {
+            return new Vector3d(
+                -pitch.Sine() * scalar,
+                -yaw.Sine() * pitch.Cosine() * scalar,
+                yaw.Cosine() * pitch.Cosine() * scalar);
+        }
+
+        public static Tuple<Angle,Angle> AngleOfVector(Vector3d vector)
+        {
+            Vector3d vec = vector.Normalized();
+            return Tuple.Create<Angle,Angle>(Angle.ArcSine(vec.X,1), Angle.ArcCosine(-vec.Z, Math.Sqrt(1 - vec.X * vec.X)));
         }
     }
 }

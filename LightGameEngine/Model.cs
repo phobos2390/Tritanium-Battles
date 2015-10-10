@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,27 +9,32 @@ namespace LightGameEngine.Model
 {
     public class Model
     {
-        private List<ModelObject> objects;
+        private List<IModelObject> objects;
 
         public Model()
         {
-
+            this.objects = new List<IModelObject>();
         }
 
-        public void addModelObject(ModelObject modelObject)
+        public void AddModelObject(IModelObject modelObject)
         {
             this.objects.Add(modelObject);
         }
 
-        public void OnUpdate()
+        public void DestroyObject(IModelObject modelObject)
         {
-            foreach(ModelObject obj in this.objects)
+            this.objects.Remove(modelObject);
+        }
+
+        public void OnUpdate(FrameEventArgs e)
+        {
+            foreach(IModelObject obj in this.objects)
             {
-                obj.OnUpdate();
+                obj.OnUpdate(e);
             }
         }
 
-        public List<ModelObject> Objects
+        public List<IModelObject> Objects
         {
             get
             {

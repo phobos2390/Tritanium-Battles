@@ -5,6 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 using OpenTK.Graphics.OpenGL;
+using LightGameEngine.Model;
+using LightGameEngine.Controller;
 
 namespace LightGameEngine.View
 {
@@ -16,23 +18,34 @@ namespace LightGameEngine.View
         private Angle camYaw;
         private Angle camRoll;
 
-        private Vector3 position;
+        private Vector3d position;
 
-        public View(int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
+        private Model.Model model;
+        private PhysicsController physics;
+
+        public View(Model.Model model, int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
             : base(height, width, mode, title)
         {
+            this.physics = new PhysicsController(model);
+
+            GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
+            GL.DepthFunc(DepthFunction.Lequal);
+
+            this.model = model;
             this.viewFrustum = viewFrustum;
             VSync = VSyncMode.On;
+            this.position = Vector3d.Zero;
         }
 
-        public View(int height, int width, Frustum viewFrustum, string title) 
-            :this(height, width, viewFrustum, OpenTK.Graphics.GraphicsMode.Default, title) { }
+        public View(Model.Model model, int height, int width, Frustum viewFrustum, string title) 
+            :this(model, height, width, viewFrustum, OpenTK.Graphics.GraphicsMode.Default, title) { }
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
 
-            GL.ClearColor(0.1f, 0.2f, 0.5f, 0.0f);
+            GL.ClearColor(System.Drawing.Color.Black);
             GL.Enable(EnableCap.DepthTest);
         }
 
@@ -50,23 +63,83 @@ namespace LightGameEngine.View
         protected override void OnUpdateFrame(FrameEventArgs e)
         {
             base.OnUpdateFrame(e);
+
+            Matrix4d modelview = Matrix4d.CreateRotationZ((float)camRoll.Radians)
+                * Matrix4d.CreateRotationX((float)camYaw.Radians)
+                * Matrix4d.CreateRotationY((float)camPitch.Radians)
+                * Matrix4d.CreateTranslation(this.position);
+
+            GL.MatrixMode(MatrixMode.Modelview);
+            GL.LoadMatrix(ref modelview);
+
+            this.physics.OnUpdateFrame(e);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-
+            
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Matrix4 modelview = Matrix4.CreateRotationZ((float)camRoll.Radians)
-                * Matrix4.CreateRotationX((float)camYaw.Radians)
-                * Matrix4.CreateRotationY((float)camPitch.Radians)
-                * Matrix4.CreateTranslation(this.position);
-
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
-
+            Vector3d lastObjPos = Vector3d.UnitZ;
+            foreach (IModelObject obj in this.model.Objects)
+            {
+                ModelDrawer.Draw(obj);
+                lastObjPos = obj.Position;
+            }
+            Tuple<Angle, Angle> angles = Angle.AngleOfVector(lastObjPos);
+            this.camPitch = angles.Item1;
+            this.camYaw = angles.Item2;
             SwapBuffers();
         }
+
+        public Vector3d Position
+        {
+            get
+            {
+                return this.position;
+            }
+            set
+            {
+                this.position = value;
+            }
+        }
+
+        public Angle CamPitch
+        {
+            get
+            {
+                return this.camPitch;
+            }
+            set
+            {
+                this.camPitch = value;
+            }
+        }
+
+        public Angle CamYaw
+        {
+            get
+            {
+                return this.camYaw;
+            }
+            set 
+            { 
+                this.camYaw = value; 
+            }
+        }
+
+        public Angle CamRoll
+        {
+            get
+            {
+                return this.camRoll;
+            }
+            set
+            {
+                this.camRoll = value;
+            }
+        }
+
     }
 }

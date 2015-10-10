@@ -9,55 +9,66 @@ using ObjLoader.Loader.Data;
 using ObjLoader.Loader.Loaders;
 using OpenTK;
 
-namespace LightGameEngine
+namespace LightGameEngine.Model
 {
-    public class ModelObject
+    public class ModelObject : IModelObject
     {
+        private double mass;
+        private Vector3d netForce;
         private Angle xRotation;
         private Angle yRotation;
         private Angle zRotation;
-        private Vector3 position;
-        private Vector3 velocity;
-        private double acceleration;
-        private int textureIndex;
+        private Vector3d position;
+        private Vector3d velocity;
         private IList<Group> groups;
         private IList<Normal> normals;
         private IList<Vertex> vertices;
         private IList<Texture> textures;
         private IList<Material> materials;
 
-        public ModelObject(LoadResult result)
+        public ModelObject(LoadResult result, double mass)
         {
             this.groups = result.Groups;
             this.normals = result.Normals;
             this.vertices = result.Vertices;
             this.textures = result.Textures;
             this.materials = result.Materials;
+            this.mass = mass;
         }
 
-        public void OnUpdate()
-        {
-            Vector3 accelVector = new Vector3(
-                (float)(yRotation.Cosine() * xRotation.Cosine() * this.acceleration),
-                (float)(xRotation.Sine() * this.acceleration),
-                (float)(yRotation.Sine() * xRotation.Cosine() * this.acceleration));
-            velocity += accelVector;
-            position += velocity;
-        }
+        public ModelObject(LoadResult result)
+            : this(result, 1)
+        { }
 
-        public double Acceleration
+        public double Mass
         {
             get
             {
-                return this.acceleration;
-            }
-            set
-            {
-                this.acceleration = value;
+                return this.mass;
             }
         }
 
-        public Angle XRotation
+        protected Vector3d Orientation
+        {
+            get
+            {
+                return Angle.ZVector(Pitch, Yaw);
+            }
+        }
+
+        public virtual void OnUpdate(FrameEventArgs e)
+        {
+            velocity += netForce / mass * e.Time;
+            position += velocity * e.Time;
+            netForce = Vector3d.Zero;
+        }
+
+        public void AddForce(Vector3d force)
+        {
+            netForce += force;
+        }
+
+        public Angle Yaw
         {
             get
             {
@@ -69,7 +80,7 @@ namespace LightGameEngine
             }
         }
 
-        public Angle YRotation
+        public Angle Pitch
         {
             get
             {
@@ -81,7 +92,7 @@ namespace LightGameEngine
             }
         }
 
-        public Angle ZRotation
+        public Angle Roll
         {
             get
             {
@@ -93,7 +104,7 @@ namespace LightGameEngine
             }
         }
 
-        public Vector3 Position
+        public Vector3d Position
         {
             get
             {
