@@ -23,14 +23,23 @@ namespace LightGameEngine.Model
 
         public void DestroyObject(IModelObject modelObject)
         {
-            this.objects.Remove(modelObject);
+            Console.WriteLine("Trying to destroy object");
+            //IModelObject obj = ModelObjectFactory.CreateModel(ModelTypes.Explosion, 0, 0, 0, modelObject.Position);
+            //this.objects.Add(modelObject);
         }
 
         public void OnUpdate(FrameEventArgs e)
         {
-            foreach(IModelObject obj in this.objects)
+            try
             {
-                obj.OnUpdate(e);
+                foreach (IModelObject obj in this.objects)
+                {
+                    obj.OnUpdate(e);
+                }
+            }
+            catch(Exception exp)
+            {
+                Console.WriteLine("Exception on update: {0}", exp);
             }
         }
 

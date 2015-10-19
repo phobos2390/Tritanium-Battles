@@ -45,17 +45,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Angle.cs" />
+    <Compile Include="ControllableObject.cs" />
+    <Compile Include="IGamepadInterface.cs" />
+    <Compile Include="IMissileFactory.cs" />
+    <Compile Include="Missile.cs" />
+    <Compile Include="ModelTypes.cs" />
     <Compile Include="Frustum.cs" />
+    <Compile Include="GamePadController.cs" />
     <Compile Include="IModelObject.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="ModelDrawer.cs" />
     <Compile Include="ModelObject.cs" />
     <Compile Include="ModelObjectFactory.cs" />
     <Compile Include="PhysicsController.cs" />
-    <Compile Include="PhysicsObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropelledObject.cs" />
+    <Compile Include="ShipObject.cs" />
     <Compile Include="View.cs" />
+    <Compile Include="MissileArray.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

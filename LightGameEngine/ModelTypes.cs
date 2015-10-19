@@ -12,6 +12,8 @@ namespace LightGameEngine.Model
         MSFV5,
         Carpo,
         Missile,
-        HighMissile
+        HighMissile,
+        Asteroid,
+        Explosion
     }
 }

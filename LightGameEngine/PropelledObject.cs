@@ -37,6 +37,7 @@ namespace LightGameEngine.Model
         {
             modObj.OnUpdate(e);
 
+            expendFuel(e);
             Vector3d accelVector = Angle.ZVector(Pitch, Yaw, thrust);
 
             modObj.AddForce(accelVector);
@@ -100,6 +101,58 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Vertices;
+            }
+        }
+
+        Vector3d IModelObject.Position
+        {
+            get
+            {
+                return modObj.Position;
+            }
+
+            set
+            {
+                modObj.Position = value;
+            }
+        }
+
+        Angle IModelObject.Pitch
+        {
+            get
+            {
+                return modObj.Pitch;
+            }
+
+            set
+            {
+                modObj.Pitch = value;
+            }
+        }
+
+        Angle IModelObject.Yaw
+        {
+            get
+            {
+                return modObj.Yaw;
+            }
+
+            set
+            {
+                modObj.Yaw = value;
+            }
+        }
+
+        Angle IModelObject.Roll
+        {
+            get
+            {
+                return modObj.Roll;
+            }
+
+            set
+            {
+                modObj.Roll = value;
             }
         }
     }

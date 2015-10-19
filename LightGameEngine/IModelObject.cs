@@ -10,10 +10,10 @@ namespace LightGameEngine.Model
         void OnUpdate(FrameEventArgs e);
         void AddForce(Vector3d force);
         double Mass { get; }
-        Vector3d Position { get; }
-        Angle Pitch { get; }
-        Angle Yaw { get; }
-        Angle Roll { get; }
+        Vector3d Position { get; set; }
+        Angle Pitch { get; set; }
+        Angle Yaw { get; set; }
+        Angle Roll { get; set; }
         IList<Group> Groups { get; }
         IList<Vertex> Vertices { get; }
     }

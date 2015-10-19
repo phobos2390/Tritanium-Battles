@@ -22,11 +22,18 @@ namespace LightGameEngine.View
 
         private Model.Model model;
         private PhysicsController physics;
+        private GamePadController gamePadController;
+        private IModelObject mainObject;
+        private int gamePadIndex;
 
-        public View(Model.Model model, int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
+        public View(int gamePadIndex, Model.Model model, ControllableObject obj, int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
             : base(height, width, mode, title)
         {
+            this.mainObject = obj;
             this.physics = new PhysicsController(model);
+
+            this.gamePadIndex = gamePadIndex;
+            this.gamePadController = new GamePadController(obj);
 
             GL.Enable(EnableCap.DepthTest);
             GL.DepthMask(true);
@@ -38,8 +45,8 @@ namespace LightGameEngine.View
             this.position = Vector3d.Zero;
         }
 
-        public View(Model.Model model, int height, int width, Frustum viewFrustum, string title) 
-            :this(model, height, width, viewFrustum, OpenTK.Graphics.GraphicsMode.Default, title) { }
+        public View(int gamePadIndex, Model.Model model, ControllableObject obj, int height, int width, Frustum viewFrustum, string title) 
+            :this(gamePadIndex, model, obj, height, width, viewFrustum, OpenTK.Graphics.GraphicsMode.Default, title) { }
 
         protected override void OnLoad(EventArgs e)
         {
@@ -64,15 +71,28 @@ namespace LightGameEngine.View
         {
             base.OnUpdateFrame(e);
 
-            Matrix4d modelview = Matrix4d.CreateRotationZ((float)camRoll.Radians)
-                * Matrix4d.CreateRotationX((float)camYaw.Radians)
-                * Matrix4d.CreateRotationY((float)camPitch.Radians)
-                * Matrix4d.CreateTranslation(this.position);
+            this.physics.OnUpdateFrame(e);
+            this.gamePadController.OnUpdateState(this.gamePadIndex);
+
+            camYaw = mainObject.Yaw;
+            camPitch = mainObject.Pitch;
+            camRoll = mainObject.Roll;
+
+            position = mainObject.Position;
+
+            //Matrix4d modelview = Matrix4d.CreateTranslation(-this.position)
+            //    * Matrix4d.CreateRotationY(-camPitch.Radians)
+            //    * Matrix4d.CreateRotationX(-camYaw.Radians)
+            //    * Matrix4d.CreateRotationZ(-camRoll.Radians);
 
             GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadMatrix(ref modelview);
+            //GL.LoadMatrix(ref modelview);
 
-            this.physics.OnUpdateFrame(e);
+            GL.LoadIdentity();
+            GL.Rotate(-camPitch.Degrees, 0, 1, 0);
+            GL.Rotate(-camYaw.Degrees, 1, 0, 0);
+            GL.Rotate(-camRoll.Degrees, 0, 0, 1);
+            GL.Translate(-position);
         }
 
         protected override void OnRenderFrame(FrameEventArgs e)
@@ -81,15 +101,13 @@ namespace LightGameEngine.View
             
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            Vector3d lastObjPos = Vector3d.UnitZ;
             foreach (IModelObject obj in this.model.Objects)
             {
-                ModelDrawer.Draw(obj);
-                lastObjPos = obj.Position;
+                //if(mainObject != obj)
+                //{
+                    ModelDrawer.Draw(obj);
+                //}
             }
-            Tuple<Angle, Angle> angles = Angle.AngleOfVector(lastObjPos);
-            this.camPitch = angles.Item1;
-            this.camYaw = angles.Item2;
             SwapBuffers();
         }
 

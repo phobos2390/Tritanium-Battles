@@ -12,13 +12,18 @@ namespace LightGameEngine.Model
     public class Missile:IModelObject
     {
         private IModelObject modObj;
+        private IModelObject firedBy;
         private Model model;
         private double blastRadius;
 
-        public Missile(double blastRadius, Model model, IModelObject modObj)
+        public Missile(double blastRadius, Model model, IModelObject firedBy, IModelObject modObj)
         {
             this.model = model;
             this.modObj = modObj;
+            this.firedBy = firedBy;
+            this.Pitch = Angle.CreateDegree(firedBy.Pitch.Degrees);
+            this.Yaw = Angle.CreateDegree(firedBy.Yaw.Degrees);
+            this.Position = firedBy.Position;
             this.blastRadius = blastRadius;
         }
 
@@ -37,12 +42,12 @@ namespace LightGameEngine.Model
                 return modObj.Mass;
             }
         }
-
-        public Angle Pitch
+        
+        public IList<Vertex> Vertices
         {
             get
             {
-                return modObj.Pitch;
+                return modObj.Vertices;
             }
         }
 
@@ -52,21 +57,23 @@ namespace LightGameEngine.Model
             {
                 return modObj.Position;
             }
-        }
 
-        public Angle Roll
-        {
-            get
+            set
             {
-                return modObj.Roll;
+                modObj.Position = value;
             }
         }
 
-        public IList<Vertex> Vertices
+        public Angle Pitch
         {
             get
             {
-                return modObj.Vertices;
+                return modObj.Pitch;
+            }
+
+            set
+            {
+                modObj.Pitch = value;
             }
         }
 
@@ -75,6 +82,24 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Yaw;
+            }
+
+            set
+            {
+                modObj.Yaw = value;
+            }
+        }
+
+        public Angle Roll
+        {
+            get
+            {
+                return modObj.Roll;
+            }
+
+            set
+            {
+                modObj.Roll = value;
             }
         }
 
@@ -85,16 +110,39 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
+            Vector3d initial = this.Position;
+
             modObj.OnUpdate(e);
 
-            foreach(IModelObject obj in this.model.Objects)
+            foreach (IModelObject obj in this.model.Objects)
             {
-                if(obj != this)
+                if (obj != this && obj != this.firedBy)
                 {
+                    Vector3d displacement = this.Position - initial;
                     Vector3d dist = this.Position - obj.Position;
-                    if(dist.LengthSquared <= this.blastRadius * this.blastRadius)
+                    if (dist.LengthSquared <= displacement.LengthSquared)
                     {
-                        model.DestroyObject(obj);
+                        Vector3d initDist = initial - obj.Position;
+                        double distDispDot = Vector3d.Dot(dist, displacement);
+                        double radiusSquared = this.blastRadius * this.blastRadius;
+                        double distLengthSquare = dist.LengthSquared;
+                        double displacementLengthSquare = displacement.LengthSquared;
+                        if (distLengthSquare <= radiusSquared)
+                        {
+                            model.DestroyObject(obj);
+                            model.DestroyObject(this);
+                        }
+                        else if (Vector3d.Dot(initDist, displacement) <= 0 && distDispDot >= 0)
+                        {
+                            Vector3d rejectionProb = distDispDot * displacement - dist * displacementLengthSquare;
+                            double radius4 = radiusSquared * radiusSquared;
+                            double dl4 = displacementLengthSquare * displacementLengthSquare;
+                            if (radius4 * dl4 <= rejectionProb.LengthSquared)
+                            {
+                                model.DestroyObject(obj);
+                                model.DestroyObject(this);
+                            }
+                        }
                     }
                 }
             }

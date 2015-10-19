@@ -26,7 +26,7 @@ namespace LightGameEngine.Model
         private IList<Texture> textures;
         private IList<Material> materials;
 
-        public ModelObject(LoadResult result, double mass)
+        public ModelObject(LoadResult result, double mass, Angle xRotation, Angle yRotation, Angle zRotation, Vector3d position)
         {
             this.groups = result.Groups;
             this.normals = result.Normals;
@@ -34,7 +34,15 @@ namespace LightGameEngine.Model
             this.textures = result.Textures;
             this.materials = result.Materials;
             this.mass = mass;
+            this.xRotation = xRotation;
+            this.yRotation = yRotation;
+            this.zRotation = zRotation;
+            this.position = position;
+            this.velocity = Vector3d.Zero;
         }
+
+        public ModelObject(LoadResult result, double mass)
+            :this(result, mass, Angle.CreateDegree(0), Angle.CreateDegree(0),Angle.CreateDegree(0),Vector3d.Zero) {}
 
         public ModelObject(LoadResult result)
             : this(result, 1)
@@ -109,6 +117,10 @@ namespace LightGameEngine.Model
             get
             {
                 return this.position;
+            }
+            set
+            {
+                this.position = value;
             }
         }
 

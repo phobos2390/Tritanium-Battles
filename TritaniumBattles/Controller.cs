@@ -14,26 +14,25 @@ namespace TritaniumBattles
 {
     class Controller
     {
-        private static string MSFV3 = "MSFV3LowerPoly.obj";
-        private static string MSFV5 = "MartianSpaceFighterVersion5.obj";
-        private static string CARPO = "CarpoClass.obj";
         private static double UPS = 60;
         private static double RPS = 60;
         static double HEIGHT = 500;
         static double WIDTH = 500;
-        static double NEAR = 2;
+        static double NEAR = 1;
         static double FAR = 1000;
         static double FOVY = 90;
         static string TITLE = "Tritanium Battles";
         static void Main(string[] args)
         {
-            ModelObject modObject = ModelObjectFactory.LoadFromFile("MSFV3LowerPoly.obj");
-            modObject.AddForce(new Vector3d(0, 0, -2/UPS));
+            ModelObjectFactory fact = new ModelObjectFactory();
             Model model = new Model();
-            IModelObject propelledObject = new PropelledObject(-6 / UPS, modObject);
-            model.AddModelObject(propelledObject);
-            //model.AddModelObject(modObject);
-            View view = new View(model, (int)HEIGHT, (int)WIDTH, new Frustum(Angle.CreateDegree(FOVY),(double)WIDTH / HEIGHT,NEAR,FAR), TITLE);
+            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, 0,0,0, new Vector3d(0,10,10)));
+            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, 0, 0, 0, new Vector3d(0, 10, -10)));
+            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, 0, 0, 0, new Vector3d(0, 0, 10)));
+            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, 0, 0, 0, new Vector3d(0, 0, -10)));
+            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV3, model, ModelTypes.Missile);
+            model.AddModelObject(obj);
+            View view = new View(0,model, obj, (int)HEIGHT, (int)WIDTH, new Frustum(Angle.CreateDegree(FOVY),(double)WIDTH / HEIGHT,NEAR,FAR), TITLE);
             Console.WriteLine("Loading done.");
             view.Run(UPS, RPS);
             Console.WriteLine("Everything done.");

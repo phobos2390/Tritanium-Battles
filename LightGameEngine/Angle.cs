@@ -54,6 +54,11 @@ namespace LightGameEngine
             return Math.Cos(this.radians);
         }
 
+        public void AddAngle(Angle angle)
+        {
+            this.Degrees += angle.degrees;
+        }
+
         public static double Sine(Angle angle)
         {
             return angle.Sine();
@@ -107,8 +112,8 @@ namespace LightGameEngine
         {
             return new Vector3d(
                 -pitch.Sine() * scalar,
-                -yaw.Sine() * pitch.Cosine() * scalar,
-                yaw.Cosine() * pitch.Cosine() * scalar);
+                yaw.Sine() * pitch.Cosine() * scalar,
+                -yaw.Cosine() * pitch.Cosine() * scalar);
         }
 
         public static Tuple<Angle,Angle> AngleOfVector(Vector3d vector)

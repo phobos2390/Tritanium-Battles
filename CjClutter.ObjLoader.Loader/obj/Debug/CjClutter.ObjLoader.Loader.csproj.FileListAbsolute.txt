@@ -1,0 +1,4 @@
+C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.pdb
