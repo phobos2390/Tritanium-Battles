@@ -13,6 +13,8 @@ namespace LightGameEngine.Model
 {
     public class ModelObject : IModelObject
     {
+        private static int currIndex = 0;
+
         private double mass;
         private Vector3d netForce;
         private Angle xRotation;
@@ -25,6 +27,8 @@ namespace LightGameEngine.Model
         private IList<Vertex> vertices;
         private IList<Texture> textures;
         private IList<Material> materials;
+        private bool destroyed;
+        private int index;
 
         public ModelObject(LoadResult result, double mass, Angle xRotation, Angle yRotation, Angle zRotation, Vector3d position)
         {
@@ -39,6 +43,8 @@ namespace LightGameEngine.Model
             this.zRotation = zRotation;
             this.position = position;
             this.velocity = Vector3d.Zero;
+            this.destroyed = false;
+            this.index = currIndex++;
         }
 
         public ModelObject(LoadResult result, double mass)
@@ -76,6 +82,14 @@ namespace LightGameEngine.Model
             netForce += force;
         }
 
+        public void Destroy()
+        {
+            if(!this.destroyed)
+            {
+                this.destroyed = true;
+            }
+        }
+        
         public Angle Yaw
         {
             get
@@ -161,6 +175,26 @@ namespace LightGameEngine.Model
             get
             {
                 return this.materials;
+            }
+        }
+
+        public bool Destroyed
+        {
+            get
+            {
+                return this.destroyed;
+            }
+        }
+
+        public bool EqualsOtherObject(IModelObject obj)
+        {
+            if(obj is ModelObject)
+            {
+                return ((ModelObject)obj).index == this.index;
+            }
+            else
+            {
+                return obj.EqualsOtherObject(this);
             }
         }
     }

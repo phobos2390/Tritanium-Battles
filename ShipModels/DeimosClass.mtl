@@ -1,10 +1,11 @@
 # Blender MTL File: 'DeimosClass.blend'
 # Material Count: 1
 
-newmtl None
-Ns 0
-Ka 0.000000 0.000000 0.000000
-Kd 0.8 0.8 0.8
-Ks 0.8 0.8 0.8
-d 1
+newmtl Titanium
+Ns 96.078431
+Ka 0.162600 0.149100 0.134100
+Kd 0.162600 0.149100 0.134100
+Ks 0.325200 0.298200 0.268200
+Ni 1.000000
+d 1.000000
 illum 2

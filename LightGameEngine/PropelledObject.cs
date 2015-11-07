@@ -48,6 +48,11 @@ namespace LightGameEngine.Model
             modObj.AddForce(force);
         }
 
+        public void Destroy()
+        {
+            modObj.Destroy();
+        }
+
         public Vector3d Position
         {
             get
@@ -154,6 +159,27 @@ namespace LightGameEngine.Model
             {
                 modObj.Roll = value;
             }
+        }
+
+        public IList<Normal> Normals
+        {
+            get
+            {
+                return modObj.Normals;
+            }
+        }
+
+        public bool Destroyed
+        {
+            get
+            {
+                return modObj.Destroyed;
+            }
+        }
+
+        public bool EqualsOtherObject(IModelObject other)
+        {
+            return other.EqualsOtherObject(modObj);
         }
     }
 }

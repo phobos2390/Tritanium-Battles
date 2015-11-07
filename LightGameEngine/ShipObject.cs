@@ -102,6 +102,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public IList<Normal> Normals
+        {
+            get
+            {
+                return modObj.Normals;
+            }
+        }
+
+        public bool Destroyed
+        {
+            get
+            {
+                return modObj.Destroyed;
+            }
+        }
+
         public void FireWeapon()
         {
             this.complement.Fire();
@@ -138,6 +154,16 @@ namespace LightGameEngine.Model
                 this.firingEngines = false;
             }
             modObj.OnUpdate(e);
+        }
+
+        public void Destroy()
+        {
+            modObj.Destroy();
+        }
+
+        public bool EqualsOtherObject(IModelObject other)
+        {
+            return other.EqualsOtherObject(modObj);
         }
     }
 }

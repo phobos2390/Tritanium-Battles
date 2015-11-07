@@ -12,6 +12,10 @@ namespace LightGameEngine.View
 {
     public class View : GameWindow
     {
+        private static float Light_X = 0;
+        private static float Light_Y = 1;
+        private static float Light_Z = 0;
+
         private Frustum viewFrustum;
 
         private Angle camPitch;
@@ -35,10 +39,6 @@ namespace LightGameEngine.View
             this.gamePadIndex = gamePadIndex;
             this.gamePadController = new GamePadController(obj);
 
-            GL.Enable(EnableCap.DepthTest);
-            GL.DepthMask(true);
-            GL.DepthFunc(DepthFunction.Lequal);
-
             this.model = model;
             this.viewFrustum = viewFrustum;
             VSync = VSyncMode.On;
@@ -52,17 +52,37 @@ namespace LightGameEngine.View
         {
             base.OnLoad(e);
 
+            GL.Enable(EnableCap.Lighting);
+            GL.Enable(EnableCap.Light0);
+            GL.Enable(EnableCap.PolygonSmooth);
+
+            Vector4 lightPos = new Vector4(Light_X, Light_Y, Light_Z, 0);
+
+            GL.Light(LightName.Light0, LightParameter.Position, lightPos);
+            GL.Light(LightName.Light0, LightParameter.Diffuse, OpenTK.Graphics.Color4.White);
+            GL.Light(LightName.Light0, LightParameter.Specular, OpenTK.Graphics.Color4.White);            
+
+            GL.Enable(EnableCap.ColorMaterial);
+
+            GL.Enable(EnableCap.CullFace);
+            GL.CullFace(CullFaceMode.Back);
+
             GL.ClearColor(System.Drawing.Color.Black);
             GL.Enable(EnableCap.DepthTest);
+            GL.DepthMask(true);
+            GL.DepthFunc(DepthFunction.Lequal);
         }
 
         protected override void OnResize(EventArgs e)
         {
             base.OnResize(e);
 
+            GL.Enable(EnableCap.PolygonSmooth);
+
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
 
             Matrix4d viewMatrix = viewFrustum.Matrix;
+
             GL.MatrixMode(MatrixMode.Projection);
             GL.LoadMatrix(ref viewMatrix);
         }
@@ -89,9 +109,9 @@ namespace LightGameEngine.View
             //GL.LoadMatrix(ref modelview);
 
             GL.LoadIdentity();
+            GL.Rotate(-camRoll.Degrees, 0, 0, 1);
             GL.Rotate(-camPitch.Degrees, 0, 1, 0);
             GL.Rotate(-camYaw.Degrees, 1, 0, 0);
-            GL.Rotate(-camRoll.Degrees, 0, 0, 1);
             GL.Translate(-position);
         }
 

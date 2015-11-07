@@ -30,16 +30,16 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
-            try
+            foreach (IModelObject obj in this.objects)
             {
-                foreach (IModelObject obj in this.objects)
-                {
-                    obj.OnUpdate(e);
-                }
+                obj.OnUpdate(e);
             }
-            catch(Exception exp)
+            for (int i = this.objects.Count - 1; i >= 0; --i)
             {
-                Console.WriteLine("Exception on update: {0}", exp);
+                if (this.objects[i].Destroyed)
+                {
+                    this.objects.RemoveAt(i);
+                }
             }
         }
 

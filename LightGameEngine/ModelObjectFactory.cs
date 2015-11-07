@@ -23,9 +23,9 @@ namespace LightGameEngine.Model
         private static double MSFV5MASS = 6.5;
         private static double CARPOMASS = 5;
         private static double ASTERMASS = 5;
-        private static double MISSLMASS = 1;
-        private static double HMSSLMASS = 1.5;
-        private static double MISSLRAD = 30;
+        private static double MISSLMASS = .0625;
+        private static double HMSSLMASS = .25;
+        private static double MISSLRAD = 5;
         private static double HMSSLRAD = 150;
         private static double SHIPTHRUST = 25;
         private static double MISSTHRUST = 10;

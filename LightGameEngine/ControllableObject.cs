@@ -97,6 +97,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public IList<Normal> Normals
+        {
+            get
+            {
+                return ((IModelObject)modObj).Normals;
+            }
+        }
+
+        public bool Destroyed
+        {
+            get
+            {
+                return ((IModelObject)modObj).Destroyed;
+            }
+        }
+
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
@@ -104,20 +120,37 @@ namespace LightGameEngine.Model
 
         public void MoveLeftJoystick(Vector2d position)
         {
-            //Console.WriteLine("Rotating Ship ({0},{1})", ANGLE_MOVE * position.X, ANGLE_MOVE * position.Y);
+            Angle addRoll = Angle.CreateDegree(-ANGLE_MOVE * position.X);
             Angle newRoll = Roll;
-            newRoll.AddAngle(Angle.CreateDegree(ANGLE_MOVE*position.X));
+            newRoll.AddAngle(addRoll);
             Roll = newRoll;
-            Angle newYaw = Yaw;
-            newYaw.AddAngle(Angle.CreateDegree(-ANGLE_MOVE * position.Y));
-            Yaw = newYaw;
-            //Console.WriteLine("Ship Orientation ({0},{1})", Roll.Degrees, Yaw.Degrees);
+            Angle curYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
+            if(Math.Abs(position.Y) > 0.01525)
+            {
+                Vector3d zVec = Angle.ZVector(Pitch, Yaw);
+                Matrix4d rRoll = Matrix4d.CreateRotationZ(-Roll.Radians);
+                Matrix4d yaw = Matrix4d.CreateRotationX(curYaw.Radians);
+                Matrix4d revRRoll = Matrix4d.CreateRotationZ(Roll.Radians);
+                zVec = Vector3d.Transform(zVec, revRRoll * yaw * rRoll);
+                //zVec = Vector3d.Transform(zVec, yaw);
+                var angles = Angle.AngleOfVector(zVec);
+                Pitch = angles.Item1;
+                Yaw = angles.Item2;
+            }
+            //Angle addPitch = Angle.CreateDegree(angleScale * Roll.Sine());
+            //Angle addYaw = Angle.CreateDegree(angleScale * Roll.Cosine());
+            //Angle newPitch = Pitch;
+            //newPitch.AddAngle(addPitch);
+            //Pitch = newPitch;
+            //Angle newYaw = Yaw;
+            //newYaw.AddAngle(addYaw);
+            //Yaw = newYaw;
         }
 
         public void MoveRightJoystick(Vector2d position)
         {
             Angle newPitch = Pitch;
-            newPitch.AddAngle(Angle.CreateDegree(ANGLE_MOVE * position.X));
+            newPitch.AddAngle(Angle.CreateDegree(-ANGLE_MOVE * position.X));
             Pitch = newPitch;
         }
 
@@ -183,42 +216,44 @@ namespace LightGameEngine.Model
 
         public void ReleaseDDown()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseDLeft()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseDRight()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseDUp()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseShoulderLeft()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseShoulderRight()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseX()
         {
-            throw new NotImplementedException();
         }
 
         public void ReleaseY()
         {
-            throw new NotImplementedException();
+        }
+
+        public void Destroy()
+        {
+            ((IModelObject)modObj).Destroy();
+        }
+
+        public bool EqualsOtherObject(IModelObject other)
+        {
+            return other.EqualsOtherObject(modObj);
         }
     }
 }

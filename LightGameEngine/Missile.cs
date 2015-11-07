@@ -103,6 +103,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public IList<Normal> Normals
+        {
+            get
+            {
+                return modObj.Normals;
+            }
+        }
+
+        public bool Destroyed
+        {
+            get
+            {
+                return modObj.Destroyed;
+            }
+        }
+
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
@@ -114,38 +130,55 @@ namespace LightGameEngine.Model
 
             modObj.OnUpdate(e);
 
+            bool explode = false;
+
             foreach (IModelObject obj in this.model.Objects)
             {
-                if (obj != this && obj != this.firedBy)
+                if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj))
                 {
                     Vector3d displacement = this.Position - initial;
                     Vector3d dist = this.Position - obj.Position;
-                    if (dist.LengthSquared <= displacement.LengthSquared)
+                    Vector3d initDist = initial - obj.Position;
+                    double distDispDot = Vector3d.Dot(dist, displacement);
+                    double radiusSquared = this.blastRadius * this.blastRadius;
+                    double distLengthSquare = dist.LengthSquared;
+                    double displacementLengthSquare = displacement.LengthSquared;
+                    if (distLengthSquare <= radiusSquared)
                     {
-                        Vector3d initDist = initial - obj.Position;
-                        double distDispDot = Vector3d.Dot(dist, displacement);
-                        double radiusSquared = this.blastRadius * this.blastRadius;
-                        double distLengthSquare = dist.LengthSquared;
-                        double displacementLengthSquare = displacement.LengthSquared;
-                        if (distLengthSquare <= radiusSquared)
+                        Console.WriteLine("1Destroying object");
+                        obj.Destroy();
+                        explode = true;
+                    }
+                    else if (Vector3d.Dot(initDist, displacement) <= 0 && distDispDot >= 0 && displacementLengthSquare > 0)
+                    {
+                        Console.WriteLine("Might have passed it");
+                        Vector3d rejectionProb = Vector3d.Multiply(displacement, distDispDot)
+                            - Vector3d.Multiply(dist, displacementLengthSquare);
+                        double dl4 = displacementLengthSquare * displacementLengthSquare;
+                        if (radiusSquared * dl4 >= rejectionProb.LengthSquared)
                         {
-                            model.DestroyObject(obj);
-                            model.DestroyObject(this);
-                        }
-                        else if (Vector3d.Dot(initDist, displacement) <= 0 && distDispDot >= 0)
-                        {
-                            Vector3d rejectionProb = distDispDot * displacement - dist * displacementLengthSquare;
-                            double radius4 = radiusSquared * radiusSquared;
-                            double dl4 = displacementLengthSquare * displacementLengthSquare;
-                            if (radius4 * dl4 <= rejectionProb.LengthSquared)
-                            {
-                                model.DestroyObject(obj);
-                                model.DestroyObject(this);
-                            }
+
+                            Console.WriteLine("2Destroying object");
+                            obj.Destroy();
+                            explode = true;
                         }
                     }
                 }
             }
+            if(explode)
+            {
+                this.Destroy();
+            }
+        }
+
+        public void Destroy()
+        {
+            modObj.Destroy();
+        }
+        
+        public bool EqualsOtherObject(IModelObject other)
+        {
+            return other.EqualsOtherObject(modObj);
         }
     }
 }

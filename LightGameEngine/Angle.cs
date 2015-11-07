@@ -116,6 +116,24 @@ namespace LightGameEngine
                 -yaw.Cosine() * pitch.Cosine() * scalar);
         }
 
+        public static Quaterniond ZOrientation(Angle pitch, Angle yaw, Angle roll)
+        {
+            return Quaterniond.FromAxisAngle(ZVector(pitch, yaw), roll.Radians);
+        }
+
+        public static Quaterniond XOrientation(Angle pitch, Angle yaw, Angle deltaYaw)
+        {
+            return Quaterniond.FromAxisAngle(XVector(pitch, yaw), deltaYaw.Radians);
+        }
+
+        public static Vector3d XVector(Angle pitch, Angle yaw)
+        {
+            return new Vector3d(
+                pitch.Cosine(),
+                yaw.Sine() * pitch.Sine(),
+                -yaw.Cosine() * pitch.Sine());
+        }
+
         public static Tuple<Angle,Angle> AngleOfVector(Vector3d vector)
         {
             Vector3d vec = vector.Normalized();
