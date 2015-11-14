@@ -17,9 +17,7 @@ namespace LightGameEngine.Model
 
         private double mass;
         private Vector3d netForce;
-        private Angle xRotation;
-        private Angle yRotation;
-        private Angle zRotation;
+        private Quaterniond orientation;
         private Vector3d position;
         private Vector3d velocity;
         private IList<Group> groups;
@@ -30,7 +28,7 @@ namespace LightGameEngine.Model
         private bool destroyed;
         private int index;
 
-        public ModelObject(LoadResult result, double mass, Angle xRotation, Angle yRotation, Angle zRotation, Vector3d position)
+        public ModelObject(LoadResult result, double mass, Quaterniond orientation, Vector3d position)
         {
             this.groups = result.Groups;
             this.normals = result.Normals;
@@ -38,9 +36,7 @@ namespace LightGameEngine.Model
             this.textures = result.Textures;
             this.materials = result.Materials;
             this.mass = mass;
-            this.xRotation = xRotation;
-            this.yRotation = yRotation;
-            this.zRotation = zRotation;
+            this.orientation = orientation;
             this.position = position;
             this.velocity = Vector3d.Zero;
             this.destroyed = false;
@@ -48,7 +44,7 @@ namespace LightGameEngine.Model
         }
 
         public ModelObject(LoadResult result, double mass)
-            :this(result, mass, Angle.CreateDegree(0), Angle.CreateDegree(0),Angle.CreateDegree(0),Vector3d.Zero) {}
+            :this(result, mass, Quaterniond.Identity,Vector3d.Zero) {}
 
         public ModelObject(LoadResult result)
             : this(result, 1)
@@ -59,14 +55,6 @@ namespace LightGameEngine.Model
             get
             {
                 return this.mass;
-            }
-        }
-
-        protected Vector3d Orientation
-        {
-            get
-            {
-                return Angle.ZVector(Pitch, Yaw);
             }
         }
 
@@ -89,40 +77,25 @@ namespace LightGameEngine.Model
                 this.destroyed = true;
             }
         }
-        
-        public Angle Yaw
+
+        private bool quatNaN(Quaterniond quat)
         {
-            get
-            {
-                return this.xRotation;
-            }
-            set
-            {
-                this.xRotation = value;
-            }
+            bool xValid = double.IsNaN(quat.X);
+            bool yValid = double.IsNaN(quat.Y);
+            bool zValid = double.IsNaN(quat.Z);
+            bool wValid = double.IsNaN(quat.W);
+            return xValid || yValid || zValid || wValid;
         }
 
-        public Angle Pitch
+        public Quaterniond Orientation
         {
             get
             {
-                return this.yRotation;
+                return this.orientation;
             }
             set
             {
-                this.yRotation = value;
-            }
-        }
-
-        public Angle Roll
-        {
-            get
-            {
-                return this.zRotation;
-            }
-            set
-            {
-                this.zRotation = value;
+                this.orientation = value;
             }
         }
 

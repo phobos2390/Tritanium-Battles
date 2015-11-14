@@ -13,9 +13,7 @@ namespace LightGameEngine.Model
         void Destroy();
         bool Destroyed { get; }
         Vector3d Position { get; set; }
-        Angle Pitch { get; set; }
-        Angle Yaw { get; set; }
-        Angle Roll { get; set; }
+        Quaterniond Orientation { get; set; }
         IList<Group> Groups { get; }
         IList<Vertex> Vertices { get; }
         IList<Normal> Normals { get; }

@@ -36,11 +36,12 @@ namespace LightGameEngine.Model
         public void OnUpdate(FrameEventArgs e)
         {
             modObj.OnUpdate(e);
-
             expendFuel(e);
-            Vector3d accelVector = Angle.ZVector(Pitch, Yaw, thrust);
-
-            modObj.AddForce(accelVector);
+            Vector3d accelVector = Vector3d.UnitZ;
+            accelVector = Vector3d.Transform(accelVector, Orientation);
+            accelVector.NormalizeFast();
+            accelVector = Vector3d.Multiply(accelVector, -thrust);
+            this.AddForce(accelVector);
         }
 
         public void AddForce(Vector3d force)
@@ -58,30 +59,6 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Position;
-            }
-        }
-
-        public Angle Pitch
-        {
-            get
-            {
-                return modObj.Pitch;
-            }
-        }
-
-        public Angle Yaw
-        {
-            get
-            {
-                return modObj.Yaw;
-            }
-        }
-
-        public Angle Roll
-        {
-            get
-            {
-                return modObj.Roll;
             }
         }
 
@@ -122,45 +99,6 @@ namespace LightGameEngine.Model
             }
         }
 
-        Angle IModelObject.Pitch
-        {
-            get
-            {
-                return modObj.Pitch;
-            }
-
-            set
-            {
-                modObj.Pitch = value;
-            }
-        }
-
-        Angle IModelObject.Yaw
-        {
-            get
-            {
-                return modObj.Yaw;
-            }
-
-            set
-            {
-                modObj.Yaw = value;
-            }
-        }
-
-        Angle IModelObject.Roll
-        {
-            get
-            {
-                return modObj.Roll;
-            }
-
-            set
-            {
-                modObj.Roll = value;
-            }
-        }
-
         public IList<Normal> Normals
         {
             get
@@ -174,6 +112,19 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Destroyed;
+            }
+        }
+
+        public Quaterniond Orientation
+        {
+            get
+            {
+                return modObj.Orientation;
+            }
+
+            set
+            {
+                modObj.Orientation = value;
             }
         }
 

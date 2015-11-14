@@ -24,9 +24,11 @@ namespace LightGameEngine.Model
         {
             GL.PushMatrix();
             GL.Translate(objectToDraw.Position);
-            GL.Rotate(objectToDraw.Yaw.Degrees, 1, 0, 0);
-            GL.Rotate(objectToDraw.Pitch.Degrees, 0, 1, 0);
-            GL.Rotate(objectToDraw.Roll.Degrees, 0, 0, 1);
+            Vector3d rotationAxis = new Vector3d();
+            double rotationAngle = 0;
+            objectToDraw.Orientation.ToAxisAngle(out rotationAxis, out rotationAngle);
+            Angle rotation = Angle.CreateRadian(rotationAngle);
+            GL.Rotate(rotation.Degrees, rotationAxis);
             foreach (Group g in objectToDraw.Groups)
             {
                 foreach (Face f in g.Faces)

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using OpenTK;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,11 @@ namespace LightGameEngine.Model
             if(this.numberOfMissiles-- > 0)
             {
                 this.factory.CreateMissile(this.firedBy, blastRadius, thrust, fuel, massOfMissiles, missileTypes, model);
-                this.firedBy.AddForce(Angle.ZVector(this.firedBy.Pitch, this.firedBy.Yaw, -thrust));
+                Vector3d accelVector = new Vector3d();
+                double angle = 0;
+                this.firedBy.Orientation.ToAxisAngle(out accelVector, out angle);
+                accelVector.NormalizeFast();
+                this.firedBy.AddForce(Vector3d.Multiply(accelVector, -thrust));
             }
         }
 

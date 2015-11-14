@@ -105,14 +105,9 @@ namespace LightGameEngine.Model
             return new ModelObject(meshMap[types], massMap[types]);
         }
 
-        public static IModelObject CreateModel(ModelTypes types, double pitchD, double yawD, double rollD, Vector3d position)
+        public static IModelObject CreateModel(ModelTypes types, Quaterniond orientation, Vector3d position)
         {
-            return CreateModel(types, Angle.CreateDegree(pitchD), Angle.CreateDegree(yawD), Angle.CreateDegree(rollD), position);
-        }
-
-        public static IModelObject CreateModel(ModelTypes types, Angle pitch, Angle yaw, Angle roll, Vector3d position)
-        {
-            return new ModelObject(meshMap[types], massMap[types], yaw, pitch, roll, position);
+            return new ModelObject(meshMap[types], massMap[types], orientation, position);
         }
 
         public void CreateMissile(IModelObject firedBy, double blastRadius, double thrust, double fuel, double mass, ModelTypes type, Model model)

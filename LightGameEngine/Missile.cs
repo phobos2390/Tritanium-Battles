@@ -21,8 +21,7 @@ namespace LightGameEngine.Model
             this.model = model;
             this.modObj = modObj;
             this.firedBy = firedBy;
-            this.Pitch = Angle.CreateDegree(firedBy.Pitch.Degrees);
-            this.Yaw = Angle.CreateDegree(firedBy.Yaw.Degrees);
+            this.Orientation = firedBy.Orientation;
             this.Position = firedBy.Position;
             this.blastRadius = blastRadius;
         }
@@ -64,45 +63,6 @@ namespace LightGameEngine.Model
             }
         }
 
-        public Angle Pitch
-        {
-            get
-            {
-                return modObj.Pitch;
-            }
-
-            set
-            {
-                modObj.Pitch = value;
-            }
-        }
-
-        public Angle Yaw
-        {
-            get
-            {
-                return modObj.Yaw;
-            }
-
-            set
-            {
-                modObj.Yaw = value;
-            }
-        }
-
-        public Angle Roll
-        {
-            get
-            {
-                return modObj.Roll;
-            }
-
-            set
-            {
-                modObj.Roll = value;
-            }
-        }
-
         public IList<Normal> Normals
         {
             get
@@ -116,6 +76,19 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Destroyed;
+            }
+        }
+
+        public Quaterniond Orientation
+        {
+            get
+            {
+                return modObj.Orientation;
+            }
+
+            set
+            {
+                modObj.Orientation = value;
             }
         }
 

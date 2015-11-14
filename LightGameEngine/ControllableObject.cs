@@ -37,19 +37,6 @@ namespace LightGameEngine.Model
             }
         }
 
-        public Angle Pitch
-        {
-            get
-            {
-                return modObj.Pitch;
-            }
-
-            set
-            {
-                modObj.Pitch = value;
-            }
-        }
-
         public Vector3d Position
         {
             get
@@ -63,37 +50,11 @@ namespace LightGameEngine.Model
             }
         }
 
-        public Angle Roll
-        {
-            get
-            {
-                return modObj.Roll;
-            }
-
-            set
-            {
-                modObj.Roll = value;
-            }
-        }
-
         public IList<Vertex> Vertices
         {
             get
             {
                 return modObj.Vertices;
-            }
-        }
-
-        public Angle Yaw
-        {
-            get
-            {
-                return modObj.Yaw;
-            }
-
-            set
-            {
-                modObj.Yaw = value;
             }
         }
 
@@ -113,45 +74,49 @@ namespace LightGameEngine.Model
             }
         }
 
+        public Quaterniond Orientation
+        {
+            get
+            {
+                return ((IModelObject)modObj).Orientation;
+            }
+
+            set
+            {
+                ((IModelObject)modObj).Orientation = value;
+            }
+        }
+
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
         }
 
+        private bool quatNaN(Quaterniond quat)
+        {
+            bool xValid = double.IsNaN(quat.X);
+            bool yValid = double.IsNaN(quat.Y);
+            bool zValid = double.IsNaN(quat.Z);
+            bool wValid = double.IsNaN(quat.W);
+            return xValid || yValid || zValid || wValid;
+        }
+
         public void MoveLeftJoystick(Vector2d position)
         {
             Angle addRoll = Angle.CreateDegree(-ANGLE_MOVE * position.X);
-            Angle newRoll = Roll;
-            newRoll.AddAngle(addRoll);
-            Roll = newRoll;
-            Angle curYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
-            if(Math.Abs(position.Y) > 0.01525)
-            {
-                Vector3d zVec = Angle.ZVector(Pitch, Yaw);
-                Matrix4d rRoll = Matrix4d.CreateRotationZ(-Roll.Radians);
-                Matrix4d yaw = Matrix4d.CreateRotationX(curYaw.Radians);
-                Matrix4d revRRoll = Matrix4d.CreateRotationZ(Roll.Radians);
-                zVec = Vector3d.Transform(zVec, revRRoll * yaw * rRoll);
-                //zVec = Vector3d.Transform(zVec, yaw);
-                var angles = Angle.AngleOfVector(zVec);
-                Pitch = angles.Item1;
-                Yaw = angles.Item2;
-            }
-            //Angle addPitch = Angle.CreateDegree(angleScale * Roll.Sine());
-            //Angle addYaw = Angle.CreateDegree(angleScale * Roll.Cosine());
-            //Angle newPitch = Pitch;
-            //newPitch.AddAngle(addPitch);
-            //Pitch = newPitch;
-            //Angle newYaw = Yaw;
-            //newYaw.AddAngle(addYaw);
-            //Yaw = newYaw;
+            Angle addYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
+            Quaterniond xRot = Quaterniond.FromAxisAngle(Vector3d.UnitX, addYaw.Radians);
+            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitZ, addRoll.Radians);
+            Orientation = (Orientation * xRot * zRot).Normalized();
         }
 
         public void MoveRightJoystick(Vector2d position)
         {
-            Angle newPitch = Pitch;
-            newPitch.AddAngle(Angle.CreateDegree(-ANGLE_MOVE * position.X));
-            Pitch = newPitch;
+            Angle addRoll = Angle.CreateDegree(-ANGLE_MOVE * position.X);
+            Angle addYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
+            Quaterniond xRot = Quaterniond.FromAxisAngle(Vector3d.UnitX, addYaw.Radians);
+            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitY, addRoll.Radians);
+            Orientation = (Orientation * xRot * zRot).Normalized();
         }
 
         public void OnUpdate(FrameEventArgs e)

@@ -18,9 +18,7 @@ namespace LightGameEngine.View
 
         private Frustum viewFrustum;
 
-        private Angle camPitch;
-        private Angle camYaw;
-        private Angle camRoll;
+        private Quaterniond camOrientation;
 
         private Vector3d position;
 
@@ -94,9 +92,7 @@ namespace LightGameEngine.View
             this.physics.OnUpdateFrame(e);
             this.gamePadController.OnUpdateState(this.gamePadIndex);
 
-            camYaw = mainObject.Yaw;
-            camPitch = mainObject.Pitch;
-            camRoll = mainObject.Roll;
+            camOrientation = mainObject.Orientation;
 
             position = mainObject.Position;
 
@@ -109,9 +105,12 @@ namespace LightGameEngine.View
             //GL.LoadMatrix(ref modelview);
 
             GL.LoadIdentity();
-            GL.Rotate(-camRoll.Degrees, 0, 0, 1);
-            GL.Rotate(-camPitch.Degrees, 0, 1, 0);
-            GL.Rotate(-camYaw.Degrees, 1, 0, 0);
+            camOrientation.Invert();
+            Vector3d rotationAxis = new Vector3d();
+            double rotationAngle = 0;
+            camOrientation.ToAxisAngle(out rotationAxis, out rotationAngle);
+            Angle rotation = Angle.CreateRadian(rotationAngle);
+            GL.Rotate(rotation.Degrees, rotationAxis);
             GL.Translate(-position);
         }
 
@@ -142,42 +141,5 @@ namespace LightGameEngine.View
                 this.position = value;
             }
         }
-
-        public Angle CamPitch
-        {
-            get
-            {
-                return this.camPitch;
-            }
-            set
-            {
-                this.camPitch = value;
-            }
-        }
-
-        public Angle CamYaw
-        {
-            get
-            {
-                return this.camYaw;
-            }
-            set 
-            { 
-                this.camYaw = value; 
-            }
-        }
-
-        public Angle CamRoll
-        {
-            get
-            {
-                return this.camRoll;
-            }
-            set
-            {
-                this.camRoll = value;
-            }
-        }
-
     }
 }

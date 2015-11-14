@@ -42,19 +42,6 @@ namespace LightGameEngine.Model
             }
         }
 
-        public Angle Pitch
-        {
-            get
-            {
-                return modObj.Pitch;
-            }
-
-            set
-            {
-                modObj.Pitch = value;
-            }
-        }
-
         public Vector3d Position
         {
             get
@@ -68,37 +55,11 @@ namespace LightGameEngine.Model
             }
         }
 
-        public Angle Roll
-        {
-            get
-            {
-                return modObj.Roll;
-            }
-
-            set
-            {
-                modObj.Roll = value;
-            }
-        }
-
         public IList<Vertex> Vertices
         {
             get
             {
                 return modObj.Vertices;
-            }
-        }
-
-        public Angle Yaw
-        {
-            get
-            {
-                return modObj.Yaw;
-            }
-
-            set
-            {
-                modObj.Yaw = value;
             }
         }
 
@@ -115,6 +76,19 @@ namespace LightGameEngine.Model
             get
             {
                 return modObj.Destroyed;
+            }
+        }
+
+        public Quaterniond Orientation
+        {
+            get
+            {
+                return modObj.Orientation;
+            }
+
+            set
+            {
+                modObj.Orientation = value;
             }
         }
 
@@ -149,8 +123,11 @@ namespace LightGameEngine.Model
             if(this.firingEngines)
             {
                 this.expendFuel(e);
-                Vector3d zVec = Angle.ZVector(this.Pitch, this.Yaw, thrust);
-                this.AddForce(zVec);
+                Vector3d accelVector = Vector3d.UnitZ;
+                accelVector = Vector3d.Transform(accelVector, Orientation);
+                accelVector.NormalizeFast();
+                accelVector = Vector3d.Multiply(accelVector, -thrust);
+                this.AddForce(accelVector);
                 this.firingEngines = false;
             }
             modObj.OnUpdate(e);
