@@ -159,6 +159,19 @@ namespace LightGameEngine.Model
             }
         }
 
+        public Vector3d Velocity
+        {
+            get
+            {
+                return this.velocity;
+            }
+
+            set
+            {
+                this.velocity = value;
+            }
+        }
+
         public bool EqualsOtherObject(IModelObject obj)
         {
             if(obj is ModelObject)

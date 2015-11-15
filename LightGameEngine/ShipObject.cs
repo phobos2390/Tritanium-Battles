@@ -11,15 +11,19 @@ namespace LightGameEngine.Model
 {
     public class ShipObject:IModelObject
     {
-        private MissileArray complement;
+        private IList<MissileArray> complement;
+        private int currentFireMode;
+        private int missileType;
         private IModelObject modObj;
         private static double FUELPERSEC = 1;
         private double thrust;
         private double fuel;
         private bool firingEngines;
 
-        public ShipObject(double thrust, double fuel, MissileArray complement, IModelObject modObj)
+        public ShipObject(double thrust, double fuel, IList<MissileArray> complement, IModelObject modObj)
         {
+            currentFireMode = 0;
+            missileType = 0;
             this.thrust = thrust;
             this.fuel = fuel;
             this.complement = complement;
@@ -92,9 +96,29 @@ namespace LightGameEngine.Model
             }
         }
 
+        public Vector3d Velocity
+        {
+            get
+            {
+                return modObj.Velocity;
+            }
+
+            set
+            {
+                modObj.Velocity = value;
+            }
+        }
+        
+        public void SwapMissileType()
+        {
+            missileType = (missileType + 1) % 2;
+        }
+
         public void FireWeapon()
         {
-            this.complement.Fire();
+            int curIndex = this.missileType * 2 + this.currentFireMode;
+            currentFireMode = (currentFireMode + 1) % 2;
+            this.complement[curIndex].Fire();
         }
 
         public void FireEngines()

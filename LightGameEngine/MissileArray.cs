@@ -14,13 +14,15 @@ namespace LightGameEngine.Model
         private double blastRadius;
         private double thrust;
         private double fuel;
+        private Vector3d positionOffset;
         private IMissileFactory factory;
         private ModelTypes missileTypes;
         private Model model;
         private IModelObject firedBy;
 
-        public MissileArray(int missiles, double massOfMissiles, double blastRadius, double thrust, double fuel, IModelObject firedBy, ModelTypes missileType, Model model, IMissileFactory factory)
+        public MissileArray(int missiles, double massOfMissiles, double blastRadius, double thrust, double fuel, IModelObject firedBy, Vector3d positionOffset, ModelTypes missileType, Model model, IMissileFactory factory)
         {
+            this.positionOffset = positionOffset;
             this.numberOfMissiles = missiles;
             this.massOfMissiles = massOfMissiles;
             this.blastRadius = blastRadius;
@@ -36,12 +38,10 @@ namespace LightGameEngine.Model
         {
             if(this.numberOfMissiles-- > 0)
             {
-                this.factory.CreateMissile(this.firedBy, blastRadius, thrust, fuel, massOfMissiles, missileTypes, model);
-                Vector3d accelVector = new Vector3d();
-                double angle = 0;
-                this.firedBy.Orientation.ToAxisAngle(out accelVector, out angle);
+                this.factory.CreateMissile(this.firedBy, Vector3d.Transform(this.positionOffset,this.firedBy.Orientation), blastRadius, thrust, fuel, massOfMissiles, missileTypes, model);
+                Vector3d accelVector = Vector3d.Transform(Vector3d.UnitZ,this.firedBy.Orientation);
                 accelVector.NormalizeFast();
-                this.firedBy.AddForce(Vector3d.Multiply(accelVector, -thrust));
+                this.firedBy.AddForce(Vector3d.Multiply(accelVector, thrust));
             }
         }
 

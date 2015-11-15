@@ -16,13 +16,14 @@ namespace LightGameEngine.Model
         private Model model;
         private double blastRadius;
 
-        public Missile(double blastRadius, Model model, IModelObject firedBy, IModelObject modObj)
+        public Missile(double blastRadius, Model model, Vector3d initialPosition, IModelObject firedBy, IModelObject modObj)
         {
             this.model = model;
             this.modObj = modObj;
             this.firedBy = firedBy;
+            this.Velocity = firedBy.Velocity;
             this.Orientation = firedBy.Orientation;
-            this.Position = firedBy.Position;
+            this.Position = initialPosition;
             this.blastRadius = blastRadius;
         }
 
@@ -89,6 +90,19 @@ namespace LightGameEngine.Model
             set
             {
                 modObj.Orientation = value;
+            }
+        }
+
+        public Vector3d Velocity
+        {
+            get
+            {
+                return modObj.Velocity;
+            }
+
+            set
+            {
+                modObj.Velocity = value;
             }
         }
 

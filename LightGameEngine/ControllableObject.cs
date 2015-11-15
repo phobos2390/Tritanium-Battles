@@ -87,6 +87,19 @@ namespace LightGameEngine.Model
             }
         }
 
+        public Vector3d Velocity
+        {
+            get
+            {
+                return ((IModelObject)modObj).Velocity;
+            }
+
+            set
+            {
+                ((IModelObject)modObj).Velocity = value;
+            }
+        }
+
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
@@ -164,6 +177,7 @@ namespace LightGameEngine.Model
 
         public void PressX()
         {
+            this.modObj.SwapMissileType();
         }
 
         public void PressY()

@@ -13,6 +13,7 @@ namespace LightGameEngine.Model
         void Destroy();
         bool Destroyed { get; }
         Vector3d Position { get; set; }
+        Vector3d Velocity { get; set; }
         Quaterniond Orientation { get; set; }
         IList<Group> Groups { get; }
         IList<Vertex> Vertices { get; }

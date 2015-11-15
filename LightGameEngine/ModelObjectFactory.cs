@@ -35,6 +35,27 @@ namespace LightGameEngine.Model
 
         private static IDictionary<ModelTypes, LoadResult> meshMap = initMeshMap();
         private static IDictionary<ModelTypes, double> massMap = initMassMap();
+        private static IDictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>> compMap = initCompMap();
+
+        private static IDictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>> initCompMap()
+        {
+            IDictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>> cMap = new Dictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>>();
+            IList<Tuple<ModelTypes, Vector3d>> msfv3Comp = new List<Tuple<ModelTypes, Vector3d>>();
+            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(2, -1.67432, 0)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(-2, -1.67432, 0)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(2, -1.67432, 0)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(-2, -1.67432, 0)));
+            IList<Tuple<ModelTypes, Vector3d>> msfv5Comp = new List<Tuple<ModelTypes, Vector3d>>();
+            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(2.5, -2.25, -5)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(-2.5, -2.25, -5)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(2.5, -2.25, -5)));
+            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(-2.5, -2.25, -5)));
+            IList<Tuple<ModelTypes, Vector3d>> carpoComp = new List<Tuple<ModelTypes, Vector3d>>();
+            cMap[ModelTypes.MSFV3] = msfv3Comp;
+            cMap[ModelTypes.MSFV5] = msfv5Comp;
+            cMap[ModelTypes.Carpo] = carpoComp;
+            return cMap;
+        }
 
         private static IDictionary<ModelTypes, double> blastRadiusMap = initRadiusMap();
         
@@ -89,15 +110,20 @@ namespace LightGameEngine.Model
             return new ModelObject(loadMesh(fileName));
         }
 
-        public MissileArray CreateComplement(ModelTypes missileType, Model model, IModelObject firedBy)
+        public MissileArray CreateComplement(ModelTypes missileType, Model model, Vector3d offset, IModelObject firedBy)
         {
-            return new MissileArray(NUM_OF_MISSILES,massMap[missileType],blastRadiusMap[missileType],MISSTHRUST,MISSFUEL,firedBy,missileType, model, this);
+            return new MissileArray(NUM_OF_MISSILES,massMap[missileType],blastRadiusMap[missileType],MISSTHRUST,MISSFUEL,firedBy, offset,missileType, model, this);
         }
 
-        public ControllableObject CreateControlledObject(ModelTypes shipType, Model model, ModelTypes missileType)
+        public ControllableObject CreateControlledObject(ModelTypes shipType, Model model)
         {
             IModelObject coreObject = CreateModel(shipType);
-            return new ControllableObject(new ShipObject(SHIPTHRUST, SHIPFUEL, CreateComplement(missileType, model, coreObject), coreObject));
+            IList<MissileArray> complement = new List<MissileArray>();
+            foreach (var val in compMap[shipType])
+            {
+                complement.Add(CreateComplement(val.Item1, model, val.Item2, coreObject));
+            }
+            return new ControllableObject(new ShipObject(SHIPTHRUST, SHIPFUEL, complement, coreObject));
         }
 
         public static IModelObject CreateModel(ModelTypes types)
@@ -110,9 +136,9 @@ namespace LightGameEngine.Model
             return new ModelObject(meshMap[types], massMap[types], orientation, position);
         }
 
-        public void CreateMissile(IModelObject firedBy, double blastRadius, double thrust, double fuel, double mass, ModelTypes type, Model model)
+        public void CreateMissile(IModelObject firedBy, Vector3d offset, double blastRadius, double thrust, double fuel, double mass, ModelTypes type, Model model)
         {
-            model.AddModelObject(new Missile(blastRadius, model, firedBy, new PropelledObject(thrust, fuel, CreateModel(type))));
+            model.AddModelObject(new Missile(blastRadius, model, offset + firedBy.Position, firedBy, new PropelledObject(thrust, fuel, CreateModel(type))));
         }
     }
 }

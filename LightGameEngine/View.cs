@@ -29,7 +29,7 @@ namespace LightGameEngine.View
         private int gamePadIndex;
 
         public View(int gamePadIndex, Model.Model model, ControllableObject obj, int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
-            : base(height, width, mode, title)
+            : base(width, height, mode, title)
         {
             this.mainObject = obj;
             this.physics = new PhysicsController(model);
