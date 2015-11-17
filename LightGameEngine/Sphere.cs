@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RayTracer
+namespace LightGameEngine.Collision
 {
-    public class Circle : IIntersectableShape
+    public class Sphere : IIntersectableShape
     {
         private Vector3d center;
         private double radius;
 
-        public Circle(Vector3d center, double radius)
+        public Sphere(Vector3d center, double radius)
         {
             this.center = center;
             this.radius = radius;

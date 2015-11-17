@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RayTracer
+namespace LightGameEngine.Collision
 {
     public class Polygon:IIntersectableShape
     {

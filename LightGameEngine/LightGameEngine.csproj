@@ -45,7 +45,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Angle.cs" />
-    <Compile Include="Circle.cs" />
+    <Compile Include="IIntersectableShape.cs" />
+    <Compile Include="Sphere.cs" />
     <Compile Include="ControllableObject.cs" />
     <Compile Include="IGamepadInterface.cs" />
     <Compile Include="IMissileFactory.cs" />
