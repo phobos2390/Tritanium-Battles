@@ -121,7 +121,7 @@ namespace LightGameEngine.Model
 
             foreach (IModelObject obj in this.model.Objects)
             {
-                if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj))
+                if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj) && !(obj is Missile))
                 {
                     Vector3d displacement = this.Position - initial;
                     Vector3d dist = this.Position - obj.Position;
@@ -144,7 +144,6 @@ namespace LightGameEngine.Model
                         double dl4 = displacementLengthSquare * displacementLengthSquare;
                         if (radiusSquared * dl4 >= rejectionProb.LengthSquared)
                         {
-
                             Console.WriteLine("2Destroying object");
                             obj.Destroy();
                             explode = true;

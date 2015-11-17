@@ -42,7 +42,7 @@ namespace TritaniumBattles
             model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.MSFV5, Quaterniond.Identity, new Vector3d(10, 0, 10)));
             model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.MSFV3, Quaterniond.Identity, new Vector3d(10, 5, 10)));
             model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Carpo, Quaterniond.Identity, new Vector3d(10, 10, 10)));
-            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV3, model);
+            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV5, model);
             model.AddModelObject(obj);
             View view = new View(0,model, obj, (int)HEIGHT, (int)WIDTH, new Frustum(Angle.CreateDegree(FOVY),(double)WIDTH / HEIGHT,NEAR,FAR), TITLE);
             Console.WriteLine("Loading done.");

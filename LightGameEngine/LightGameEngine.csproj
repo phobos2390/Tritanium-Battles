@@ -45,6 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Angle.cs" />
+    <Compile Include="Circle.cs" />
     <Compile Include="ControllableObject.cs" />
     <Compile Include="IGamepadInterface.cs" />
     <Compile Include="IMissileFactory.cs" />
@@ -58,6 +59,7 @@
     <Compile Include="ModelObject.cs" />
     <Compile Include="ModelObjectFactory.cs" />
     <Compile Include="PhysicsController.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropelledObject.cs" />
     <Compile Include="ShipObject.cs" />

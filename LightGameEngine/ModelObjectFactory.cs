@@ -24,14 +24,15 @@ namespace LightGameEngine.Model
         private static double CARPOMASS = 5;
         private static double ASTERMASS = 5;
         private static double MISSLMASS = .0625;
-        private static double HMSSLMASS = .25;
+        private static double HMSSLMASS = .125;
         private static double MISSLRAD = 5;
-        private static double HMSSLRAD = 150;
+        private static double HMSSLRAD = 20;
         private static double SHIPTHRUST = 25;
         private static double MISSTHRUST = 10;
         private static double MISSFUEL = 10;
         private static double SHIPFUEL = 1500;
-        private static int NUM_OF_MISSILES = 30;
+        private static int NUM_OF_MISSILES = 15;
+        private static int NUM_OF_HIGH = 4;
 
         private static IDictionary<ModelTypes, LoadResult> meshMap = initMeshMap();
         private static IDictionary<ModelTypes, double> massMap = initMassMap();
@@ -46,10 +47,10 @@ namespace LightGameEngine.Model
             msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(2, -1.67432, 0)));
             msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(-2, -1.67432, 0)));
             IList<Tuple<ModelTypes, Vector3d>> msfv5Comp = new List<Tuple<ModelTypes, Vector3d>>();
-            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(2.5, -2.25, -5)));
-            msfv3Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(-2.5, -2.25, -5)));
-            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(2.5, -2.25, -5)));
-            msfv3Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(-2.5, -2.25, -5)));
+            msfv5Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(2.5, -2.25, -5)));
+            msfv5Comp.Add(Tuple.Create(ModelTypes.Missile, new Vector3d(-2.5, -2.25, -5)));
+            msfv5Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(2.5, -2.25, -5)));
+            msfv5Comp.Add(Tuple.Create(ModelTypes.HighMissile, new Vector3d(-2.5, -2.25, -5)));
             IList<Tuple<ModelTypes, Vector3d>> carpoComp = new List<Tuple<ModelTypes, Vector3d>>();
             cMap[ModelTypes.MSFV3] = msfv3Comp;
             cMap[ModelTypes.MSFV5] = msfv5Comp;

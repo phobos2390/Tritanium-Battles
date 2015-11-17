@@ -177,6 +177,7 @@ namespace LightGameEngine.Model
 
         public void PressX()
         {
+            Console.WriteLine("Swapping Missile Type");
             this.modObj.SwapMissileType();
         }
 
