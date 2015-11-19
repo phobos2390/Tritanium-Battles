@@ -32,6 +32,7 @@ namespace LightGameEngine.Controller
                         double m1m2 = modObj.Mass * modObj2.Mass;
                         displacement.Normalize();
                         displacement = Vector3d.Multiply(displacement, GRAVITATIONAL_CONST * m1m2 / r);
+                        modObj.AddForce(displacement);
                     }
                 }
             }

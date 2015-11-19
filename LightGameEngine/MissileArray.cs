@@ -43,6 +43,10 @@ namespace LightGameEngine.Model
                 accelVector.NormalizeFast();
                 this.firedBy.AddForce(Vector3d.Multiply(accelVector, thrust));
             }
+            else
+            {
+                this.numberOfMissiles = 0;
+            }
         }
 
         public int Count

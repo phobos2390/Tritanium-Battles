@@ -21,6 +21,14 @@ namespace LightGameEngine.Model
             this.firingEngines = false;
         }
 
+        public ShipObject ControlledObject
+        {
+            get
+            {
+                return this.modObj;
+            }
+        }
+
         public IList<Group> Groups
         {
             get
@@ -130,6 +138,68 @@ namespace LightGameEngine.Model
             Quaterniond xRot = Quaterniond.FromAxisAngle(Vector3d.UnitX, addYaw.Radians);
             Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitY, addRoll.Radians);
             Orientation = (Orientation * xRot * zRot).Normalized();
+        }
+
+        public string MissileType
+        {
+            get
+            {
+                if(modObj.MissileType == 0)
+                {
+                    return "Standard Missile";
+                }
+                else
+                {
+                    return "High Missile";
+                }
+            }
+        }
+
+        public string FireMode
+        {
+            get
+            {
+                if (modObj.FireMode == 0)
+                {
+                    return "Left";
+                }
+                else
+                {
+                    return "Right";
+                }
+            }
+        }
+
+        public int LeftMissiles
+        {
+            get
+            {
+                return modObj.LeftMissiles;
+            }
+        }
+
+        public int RightMissiles
+        {
+            get
+            {
+                return modObj.RightMissiles;
+            }
+        }
+
+        public int LeftHighMissiles
+        {
+            get
+            {
+                return modObj.LeftHighMissiles;
+            }
+        }
+
+        public int RightHighMissiles
+        {
+            get
+            {
+                return modObj.RightHighMissiles;
+            }
         }
 
         public void OnUpdate(FrameEventArgs e)

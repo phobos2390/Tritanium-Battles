@@ -18,25 +18,38 @@ namespace LightGameEngine.Model
         private static string HMSSL = "HighMissile.obj";
         private static string ASTER = "Asteroid.obj";
         private static string EXPLO = "Explosion.obj";
+        private static string DEIMO = "DeimosClass.obj";
 
         private static double MSFV3MASS = 4.3;
         private static double MSFV5MASS = 6.5;
         private static double CARPOMASS = 5;
-        private static double ASTERMASS = 5;
-        private static double MISSLMASS = .0625;
-        private static double HMSSLMASS = .125;
+        private static double ASTERMASS = 40000000;
+        private static double MISSLMASS = .001953125;
+        private static double HMSSLMASS = .0078125;
+        private static double DEIMOMASS = 10000;
         private static double MISSLRAD = 5;
         private static double HMSSLRAD = 20;
         private static double SHIPTHRUST = 25;
         private static double MISSTHRUST = 10;
         private static double MISSFUEL = 10;
         private static double SHIPFUEL = 1500;
-        private static int NUM_OF_MISSILES = 15;
+        private static int NUM_OF_MISSILES = 45;
         private static int NUM_OF_HIGH = 4;
 
         private static IDictionary<ModelTypes, LoadResult> meshMap = initMeshMap();
         private static IDictionary<ModelTypes, double> massMap = initMassMap();
         private static IDictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>> compMap = initCompMap();
+        private static IDictionary<ModelTypes, double> boundRadMap = initBoundMap();
+
+        private static IDictionary<ModelTypes,double> initBoundMap()
+        {
+            IDictionary<ModelTypes, double> dict = new Dictionary<ModelTypes, double>();
+            dict[ModelTypes.MSFV3] = 8;
+            dict[ModelTypes.MSFV5] = 13;
+            dict[ModelTypes.Carpo] = 17;
+            dict[ModelTypes.Deimos] = 117;
+            return dict;
+        }
 
         private static IDictionary<ModelTypes, IList<Tuple<ModelTypes, Vector3d>>> initCompMap()
         {
@@ -70,6 +83,7 @@ namespace LightGameEngine.Model
             meshMap[ModelTypes.HighMissile] = loadMesh(HMSSL);
             meshMap[ModelTypes.Asteroid] = loadMesh(ASTER);
             meshMap[ModelTypes.Explosion] = loadMesh(EXPLO);
+            meshMap[ModelTypes.Deimos] = loadMesh(DEIMO);
             return meshMap;
         }
 
@@ -83,6 +97,7 @@ namespace LightGameEngine.Model
             massMap[ModelTypes.HighMissile] = HMSSLMASS;
             massMap[ModelTypes.Asteroid] = ASTERMASS;
             massMap[ModelTypes.Explosion] = MISSLMASS;
+            massMap[ModelTypes.Deimos] = DEIMOMASS;
             return massMap;
         }
 
@@ -111,9 +126,9 @@ namespace LightGameEngine.Model
             return new ModelObject(loadMesh(fileName));
         }
 
-        public MissileArray CreateComplement(ModelTypes missileType, Model model, Vector3d offset, IModelObject firedBy)
+        public MissileArray CreateComplement(ModelTypes missileType, Model model, Vector3d offset, int numOfMissiles, IModelObject firedBy)
         {
-            return new MissileArray(NUM_OF_MISSILES,massMap[missileType],blastRadiusMap[missileType],MISSTHRUST,MISSFUEL,firedBy, offset,missileType, model, this);
+            return new MissileArray(numOfMissiles, massMap[missileType],blastRadiusMap[missileType],MISSTHRUST,MISSFUEL,firedBy, offset,missileType, model, this);
         }
 
         public ControllableObject CreateControlledObject(ModelTypes shipType, Model model)
@@ -122,7 +137,14 @@ namespace LightGameEngine.Model
             IList<MissileArray> complement = new List<MissileArray>();
             foreach (var val in compMap[shipType])
             {
-                complement.Add(CreateComplement(val.Item1, model, val.Item2, coreObject));
+                if(val.Item1 == ModelTypes.Missile)
+                {
+                    complement.Add(CreateComplement(val.Item1, model, val.Item2, NUM_OF_MISSILES, coreObject));
+                }
+                else
+                {
+                    complement.Add(CreateComplement(val.Item1, model, val.Item2, NUM_OF_HIGH, coreObject));
+                }
             }
             return new ControllableObject(new ShipObject(SHIPTHRUST, SHIPFUEL, complement, coreObject));
         }

@@ -30,6 +30,38 @@ namespace LightGameEngine.Model
             this.modObj = modObj;
         }
 
+        public int LeftMissiles
+        {
+            get
+            {
+                return complement[1].Count;
+            }
+        }
+
+        public int RightMissiles
+        {
+            get
+            {
+                return complement[0].Count;
+            }
+        }
+
+        public int LeftHighMissiles
+        {
+            get
+            {
+                return complement[3].Count;
+            }
+        }
+
+        public int RightHighMissiles
+        {
+            get
+            {
+                return complement[2].Count;
+            }
+        }
+
         public IList<Group> Groups
         {
             get
@@ -106,6 +138,22 @@ namespace LightGameEngine.Model
             set
             {
                 modObj.Velocity = value;
+            }
+        }
+
+        public int MissileType
+        {
+            get
+            {
+                return this.missileType;
+            }
+        }
+
+        public int FireMode
+        {
+            get
+            {
+                return this.currentFireMode;
             }
         }
         
