@@ -4,6 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ObjLoader.Loader.Data.Elements;
+using ObjLoader.Loader.Data.VertexData;
 
 namespace LightGameEngine.Collision
 {
@@ -19,6 +21,18 @@ namespace LightGameEngine.Collision
         public Polygon(IList<Vector3d> points)
         {
             this.points = points;
+            this.normal = calculateNormal();
+            this.distance = Vector3d.Dot(points[0], this.normal);
+        }
+
+        public Polygon(Face face, IList<Vertex> vertices)
+        {
+            this.points = new List<Vector3d>();
+            for(int i = 0; i < face.Count; ++i)
+            {
+                Vertex vert = vertices[face[i].VertexIndex - 1];
+                this.points.Add(new Vector3d(vert.X, vert.Y, vert.Z));
+            }
             this.normal = calculateNormal();
             this.distance = Vector3d.Dot(points[0], this.normal);
         }
@@ -65,28 +79,26 @@ namespace LightGameEngine.Collision
 
         public Tuple<bool,Vector3d,Vector3d> Intersects(Vector3d initial, Vector3d ray)
         {
-            bool rayIntersectsSphere = Circle.IntersectSphere(initial, ray, this.center, this.radiusSquare);
+            bool rayIntersectsSphere = Sphere.IntersectSphere(initial, ray, this.center, this.radiusSquare);
             var result = IntersectsPlane(initial, ray);
             if (result.Item1 && rayIntersectsSphere)
             {
                 Vector3d pTimesRayNormDot = IntersectionMultByRayNormDot(initial, ray, result.Item2);
-                if (Circle.PointInSphere(pTimesRayNormDot, Vector3d.Multiply(this.center, result.Item2), this.radiusSquare * result.Item2 * result.Item2))
+                if (Sphere.PointInSphere(pTimesRayNormDot, Vector3d.Multiply(this.center, result.Item2), this.radiusSquare * result.Item2 * result.Item2))
                 {
                     Vector3d intersect = Vector3d.Divide(pTimesRayNormDot, result.Item2);
                     if (Vector3d.Dot(intersect - initial, ray) > 0)
                     {
-                        //outGoing.NormalizeFast();
                         Vector3d outGoing = Vector3d.Cross(ray, normal);
                         int crossings = 0;
-                        //the multiply scales each point by ray dot normal
-                        Vector3d lastPoint = Vector3d.Multiply(points[0], 1) - intersect;// result.Item2) - pTimesRayNormDot;
+                        Vector3d lastPoint = Vector3d.Multiply(points[0], 1) - intersect;
                         if (outGoing == Vector3d.Zero)
                         {
                             outGoing = lastPoint;
                             int ctr = 1;
                             while (outGoing == Vector3d.Zero)
                             {
-                                outGoing = Vector3d.Multiply(points[ctr++], 1) - intersect;// result.Item2)- pTimesRayNormDot;
+                                outGoing = Vector3d.Multiply(points[ctr++], 1) - intersect;
                             }
                         }
                         while (outGoing.LengthSquared < 4)
@@ -126,7 +138,7 @@ namespace LightGameEngine.Collision
                         bool hit = crossings % 2 == 1;
                         if (hit)
                         {
-                            return Tuple.Create(hit, intersect/*/Vector3d.Divide(pTimesRayNormDot, result.Item2)/**/, this.normal);
+                            return Tuple.Create(hit, intersect, this.normal);
                         }
                     }
                 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using OpenTK;
+using LightGameEngine.Collision;
 
 namespace LightGameEngine.Model
 {
@@ -15,6 +16,7 @@ namespace LightGameEngine.Model
         private IModelObject firedBy;
         private Model model;
         private double blastRadius;
+        private double radiusSquare;
 
         public Missile(double blastRadius, Model model, Vector3d initialPosition, IModelObject firedBy, IModelObject modObj)
         {
@@ -25,6 +27,7 @@ namespace LightGameEngine.Model
             this.Orientation = firedBy.Orientation;
             this.Position = initialPosition;
             this.blastRadius = blastRadius;
+            this.radiusSquare = this.blastRadius * this.blastRadius;
         }
 
         public IList<Group> Groups
@@ -123,26 +126,20 @@ namespace LightGameEngine.Model
             {
                 if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj) && !(obj is Missile))
                 {
-                    Vector3d displacement = this.Position - initial;
-                    Vector3d dist = this.Position - obj.Position;
-                    Vector3d initDist = initial - obj.Position;
-                    double distDispDot = Vector3d.Dot(dist, displacement);
-                    double radiusSquared = this.blastRadius * this.blastRadius;
-                    double distLengthSquare = dist.LengthSquared;
-                    double displacementLengthSquare = displacement.LengthSquared;
-                    if (distLengthSquare <= radiusSquared)
+                    Vector3d ray = obj.Position - initial;
+                    Vector3d dist = this.Position - initial;
+                    Vector3d revDist = this.Position - obj.Position;
+                    if(Sphere.PointInSphere(obj.Position, this.Position, this.radiusSquare))
                     {
                         Console.WriteLine("1Destroying object");
                         obj.Destroy();
                         explode = true;
                     }
-                    else if (Vector3d.Dot(initDist, displacement) <= 0 && distDispDot >= 0 && displacementLengthSquare > 0)
+                    else if (Vector3d.Dot(ray, dist) > 0 && Vector3d.Dot(revDist, dist) > 0)
                     {
                         Console.WriteLine("Might have passed it");
-                        Vector3d rejectionProb = Vector3d.Multiply(displacement, distDispDot)
-                            - Vector3d.Multiply(dist, displacementLengthSquare);
-                        double dl4 = displacementLengthSquare * displacementLengthSquare;
-                        if (radiusSquared * dl4 >= rejectionProb.LengthSquared)
+                        double vxdLength = Vector3d.Cross(ray, dist).LengthSquared;
+                        if (vxdLength <= this.radiusSquare * dist.LengthSquared)
                         {
                             Console.WriteLine("2Destroying object");
                             obj.Destroy();
