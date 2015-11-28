@@ -36,6 +36,12 @@
     <StartupObject>TritaniumBattles.Controller</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BulletSharp">
+      <HintPath>..\LightGameEngine\bin\Debug\BulletSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="CjClutter.ObjLoader.Loader">
+      <HintPath>..\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -60,10 +66,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj">
-      <Project>{1fd37682-98d6-442f-8e15-646247c690dc}</Project>
-      <Name>CjClutter.ObjLoader.Loader</Name>
-    </ProjectReference>
     <ProjectReference Include="..\LightGameEngine\LightGameEngine.csproj">
       <Project>{5dcaf87a-1e4d-47e0-99f3-a110fa1cde59}</Project>
       <Name>LightGameEngine</Name>

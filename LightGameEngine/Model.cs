@@ -1,4 +1,5 @@
-﻿using OpenTK;
+﻿using LightGameEngine.Collision;
+using OpenTK;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,16 +10,27 @@ namespace LightGameEngine.Model
 {
     public class Model
     {
-        private List<IModelObject> objects;
+        private IList<IModelObject> objects;
+        private IList<IModelObject> addedObjects;
+        private bool modifiable;
 
         public Model()
         {
             this.objects = new List<IModelObject>();
+            addedObjects = new List<IModelObject>();
+            modifiable = true;
         }
 
         public void AddModelObject(IModelObject modelObject)
         {
-            this.objects.Add(modelObject);
+            if (!modifiable)
+            {
+                addedObjects.Add(modelObject);
+            }
+            else
+            {
+                objects.Add(modelObject);
+            }
         }
 
         public void DestroyObject(IModelObject modelObject)
@@ -30,9 +42,15 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
+            modifiable = false;
             foreach (IModelObject obj in this.objects)
             {
                 obj.OnUpdate(e);
+            }
+            modifiable = true;
+            for(int i = addedObjects.Count - 1; i >= 0; --i)
+            {
+                objects.Add(addedObjects[i]);
             }
             for (int i = this.objects.Count - 1; i >= 0; --i)
             {
@@ -43,12 +61,40 @@ namespace LightGameEngine.Model
             }
         }
 
-        public List<IModelObject> Objects
+        public IList<IModelObject> Objects
         {
             get
             {
                 return this.objects;
             }
+        }
+
+        public Tuple<IModelObject, Vector3d> IntersectScene(Vector3d initial, Vector3d ray, IModelObject notMe)
+        {
+            IModelObject returnShape = null;
+            double lastDistSquared = 0;
+            Vector3d intersectionPoint = Vector3d.Zero;
+            Vector3d normal = Vector3d.Zero;
+            foreach (IModelObject obj in this.objects)
+            {
+                if (!notMe.EqualsOtherObject(obj))
+                {
+                    Sphere sphere = new Sphere(obj.Position, obj.RadiusSquared);
+                    var ret = sphere.IntersectionVals(initial, ray);
+                    if (ret.Item1)
+                    {
+                        Vector3d intersection = sphere.Intersection(initial, ret.Item2, ray, obj.RadiusSquared, ret.Item4, ret.Item5);
+                        double distSquared = (intersection - initial).LengthSquared;
+                        if (returnShape == null || lastDistSquared > distSquared)
+                        {
+                            returnShape = obj;
+                            lastDistSquared = distSquared;
+                            intersectionPoint = intersection;
+                        }
+                    }
+                }
+            }
+            return Tuple.Create(returnShape, intersectionPoint);
         }
     }
 }

@@ -15,7 +15,9 @@ namespace LightGameEngine.Model
         double thrust;
         double fuel;
         IModelObject modObj;
-        
+
+        public event OnDeathHandler OnDeath;
+
         public PropelledObject(double thrust, double fuel, IModelObject obj)
         {
             this.fuel = fuel;
@@ -47,11 +49,6 @@ namespace LightGameEngine.Model
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
-        }
-
-        public void Destroy()
-        {
-            modObj.Destroy();
         }
 
         public Vector3d Position
@@ -141,9 +138,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public double RadiusSquared
+        {
+            get
+            {
+                return modObj.RadiusSquared;
+            }
+        }
+
         public bool EqualsOtherObject(IModelObject other)
         {
             return other.EqualsOtherObject(modObj);
+        }
+
+        public void Destroy(IModelObject destroyer)
+        {
+            modObj.Destroy(destroyer);
         }
     }
 }

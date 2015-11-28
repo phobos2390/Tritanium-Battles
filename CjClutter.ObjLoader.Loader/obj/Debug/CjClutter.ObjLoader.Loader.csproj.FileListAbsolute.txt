@@ -2,3 +2,10 @@ C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjL
 C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.pdb
 C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.dll
 C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Documents\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\bin\Debug\BulletSharp.dll
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\bin\Debug\BulletSharp.dll
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.csprojResolveAssemblyReference.cache

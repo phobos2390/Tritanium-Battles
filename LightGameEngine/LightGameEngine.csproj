@@ -34,6 +34,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>bin\Debug\BulletSharp.dll</HintPath>
     </Reference>
+    <Reference Include="CjClutter.ObjLoader.Loader">
+      <HintPath>..\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll</HintPath>
+    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -51,9 +54,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Alignment.cs" />
     <Compile Include="Angle.cs" />
+    <Compile Include="ComputerControlledOpponent.cs" />
+    <Compile Include="FightingState.cs" />
+    <Compile Include="IAlignedShip.cs" />
+    <Compile Include="IComputerState.cs" />
+    <Compile Include="IComputerStateMachine.cs" />
     <Compile Include="IIntersectableShape.cs" />
     <Compile Include="KeyboardController.cs" />
+    <Compile Include="OnDeathEventArgs.cs" />
+    <Compile Include="OnSightEventArgs.cs" />
+    <Compile Include="PatrollingState.cs" />
     <Compile Include="ShipListener.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="ControllableObject.cs" />
@@ -78,12 +90,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\..\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj">
-      <Project>{1fd37682-98d6-442f-8e15-646247c690dc}</Project>
-      <Name>CjClutter.ObjLoader.Loader</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

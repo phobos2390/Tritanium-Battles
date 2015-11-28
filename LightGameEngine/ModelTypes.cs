@@ -11,6 +11,7 @@ namespace LightGameEngine.Model
         MSFV3,
         MSFV5,
         Carpo,
+        CarpoRefit,
         Deimos,
         Missile,
         HighMissile,

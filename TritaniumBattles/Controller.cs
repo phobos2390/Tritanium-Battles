@@ -19,19 +19,20 @@ namespace TritaniumBattles
         static double HEIGHT = 650;
         static double WIDTH = 1000;
         static double NEAR = 1;
-        static double FAR = 1000;
+        static double FAR = 2000;
         static double FOVY = 90;
         static string TITLE = "Tritanium Battles";
-        static void Main(string[] args)
+        
+        public static void Main(string[] args)
         {
             ModelObjectFactory fact = new ModelObjectFactory();
             Model model = new Model();
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, Quaterniond.Identity, new Vector3d(300,100,-50)));
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.MSFV5, Quaterniond.Identity, new Vector3d(10, 0, 10)));
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.MSFV3, Quaterniond.Identity, new Vector3d(10, 5, 10)));
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Carpo, Quaterniond.Identity, new Vector3d(-10, 20, 20)));
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Deimos, Quaterniond.Identity, new Vector3d(60, -100, 100)));
-            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV5, model);
+            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, Quaterniond.Identity, new Vector3d(0, 0, -1000)));
+            //model.AddModelObject(fact.CreateUnarmedAI(ModelTypes.Carpo, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            //model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            //model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV5, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV5, model, Quaterniond.Identity, ModelObjectFactory.randVec());
             model.AddModelObject(obj);
             View view = new View(0,model, obj, (int)HEIGHT, (int)WIDTH, new Frustum(Angle.CreateDegree(FOVY),(double)WIDTH / HEIGHT,NEAR,FAR), TITLE);
             Console.WriteLine("Loading done.");

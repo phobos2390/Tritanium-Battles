@@ -5,12 +5,15 @@ using System.Collections.Generic;
 
 namespace LightGameEngine.Model
 {
+    public delegate void OnDeathHandler(object sender, OnDeathEventArgs e);
+
     public interface IModelObject
     {
+        event OnDeathHandler OnDeath;
         void OnUpdate(FrameEventArgs e);
         void AddForce(Vector3d force);
         double Mass { get; }
-        void Destroy();
+        void Destroy(IModelObject destroyer);
         bool Destroyed { get; }
         Vector3d Position { get; set; }
         Vector3d Velocity { get; set; }
@@ -18,6 +21,7 @@ namespace LightGameEngine.Model
         IList<Group> Groups { get; }
         IList<Vertex> Vertices { get; }
         IList<Normal> Normals { get; }
+        double RadiusSquared { get; }
         bool EqualsOtherObject(IModelObject other);
     }
 }

@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using OpenTK;
+using LightGameEngine.Collision;
 
 namespace LightGameEngine.Model
 {
-    public class ShipObject:IModelObject
+    public delegate void OnSightHandler(object sender, OnSightEventArgs e);
+
+    public class ShipObject:IModelObject, IAlignedShip
     {
+        public event OnSightHandler OnSight;
+
+        private Alignment alignment;
         private IList<MissileArray> complement;
         private int currentFireMode;
         private int missileType;
@@ -19,8 +25,11 @@ namespace LightGameEngine.Model
         private double thrust;
         private double fuel;
         private bool firingEngines;
+        private Model model;
 
-        public ShipObject(double thrust, double fuel, IList<MissileArray> complement, IModelObject modObj)
+        public event OnDeathHandler OnDeath;
+
+        public ShipObject(double thrust, double fuel, IList<MissileArray> complement, IModelObject modObj, Model model, Alignment alignment)
         {
             currentFireMode = 0;
             missileType = 0;
@@ -28,6 +37,16 @@ namespace LightGameEngine.Model
             this.fuel = fuel;
             this.complement = complement;
             this.modObj = modObj;
+            this.model = model;
+            this.alignment = alignment;
+        }
+
+        public Alignment ShipAlignment
+        {
+            get
+            {
+                return this.alignment;
+            }
         }
 
         public int LeftMissiles
@@ -156,7 +175,15 @@ namespace LightGameEngine.Model
                 return this.currentFireMode;
             }
         }
-        
+
+        public double RadiusSquared
+        {
+            get
+            {
+                return modObj.RadiusSquared;
+            }
+        }
+
         public void SwapMissileType()
         {
             missileType = (missileType + 1) % 2;
@@ -172,7 +199,7 @@ namespace LightGameEngine.Model
         public void FireEngines()
         {
             this.firingEngines = true;
-            Console.WriteLine("Firing Engines");
+            //Console.WriteLine("Firing Engines");
         }
 
         private void expendFuel(FrameEventArgs e)
@@ -190,24 +217,34 @@ namespace LightGameEngine.Model
             modObj.AddForce(force);
         }
 
+        private void seeingOtherObject(IModelObject obj)
+        {
+            OnSight(this, new OnSightEventArgs(obj));
+        }
+
         public void OnUpdate(FrameEventArgs e)
         {
-            if(this.firingEngines)
+            Vector3d accelVector = -Vector3d.UnitZ;
+            accelVector = Vector3d.Transform(accelVector, Orientation);
+            var intersected = model.IntersectScene(Position, accelVector, this);
+            if(intersected.Item1 != null)
+            {
+                seeingOtherObject(intersected.Item1);
+            }
+            if (this.firingEngines)
             {
                 this.expendFuel(e);
-                Vector3d accelVector = Vector3d.UnitZ;
-                accelVector = Vector3d.Transform(accelVector, Orientation);
                 accelVector.NormalizeFast();
-                accelVector = Vector3d.Multiply(accelVector, -thrust);
+                accelVector = Vector3d.Multiply(accelVector, thrust);
                 this.AddForce(accelVector);
                 this.firingEngines = false;
             }
             modObj.OnUpdate(e);
         }
 
-        public void Destroy()
+        public void Destroy(IModelObject destroyer)
         {
-            modObj.Destroy();
+            modObj.Destroy(destroyer);
         }
 
         public bool EqualsOtherObject(IModelObject other)

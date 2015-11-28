@@ -12,11 +12,21 @@ namespace LightGameEngine.Model
 {
     public class Missile:IModelObject
     {
+        private const double TIMEDELAY = 20;
+
         private IModelObject modObj;
         private IModelObject firedBy;
         private Model model;
         private double blastRadius;
         private double radiusSquare;
+        private double timeLeft;
+
+        public event OnDeathHandler OnDeath;
+
+        public void OnExploded(object sender, OnDeathEventArgs e)
+        {
+            Console.WriteLine("Exploded");
+        }
 
         public Missile(double blastRadius, Model model, Vector3d initialPosition, IModelObject firedBy, IModelObject modObj)
         {
@@ -28,6 +38,8 @@ namespace LightGameEngine.Model
             this.Position = initialPosition;
             this.blastRadius = blastRadius;
             this.radiusSquare = this.blastRadius * this.blastRadius;
+            timeLeft = TIMEDELAY;
+            OnDeath += OnExploded;
         }
 
         public IList<Group> Groups
@@ -109,6 +121,14 @@ namespace LightGameEngine.Model
             }
         }
 
+        public double RadiusSquared
+        {
+            get
+            {
+                return modObj.RadiusSquared;
+            }
+        }
+
         public void AddForce(Vector3d force)
         {
             modObj.AddForce(force);
@@ -132,7 +152,7 @@ namespace LightGameEngine.Model
                     if(Sphere.PointInSphere(obj.Position, this.Position, this.radiusSquare))
                     {
                         Console.WriteLine("1Destroying object");
-                        obj.Destroy();
+                        obj.Destroy(this);
                         explode = true;
                     }
                     else if (Vector3d.Dot(ray, dist) > 0 && Vector3d.Dot(revDist, dist) > 0)
@@ -142,7 +162,7 @@ namespace LightGameEngine.Model
                         if (vxdLength <= this.radiusSquare * dist.LengthSquared)
                         {
                             Console.WriteLine("2Destroying object");
-                            obj.Destroy();
+                            obj.Destroy(this);
                             explode = true;
                         }
                     }
@@ -150,18 +170,27 @@ namespace LightGameEngine.Model
             }
             if(explode)
             {
-                this.Destroy();
+                Destroy(this);
             }
-        }
-
-        public void Destroy()
-        {
-            modObj.Destroy();
+            timeLeft -= e.Time;
+            if(timeLeft <= 0)
+            {
+                Destroy(this);
+            }
         }
         
         public bool EqualsOtherObject(IModelObject other)
         {
             return other.EqualsOtherObject(modObj);
+        }
+
+        public void Destroy(IModelObject destroyer)
+        {
+            if(!Destroyed)
+            {
+                modObj.Destroy(destroyer);
+                OnDeath(this, new OnDeathEventArgs(this, destroyer));
+            }
         }
     }
 }

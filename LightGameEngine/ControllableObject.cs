@@ -9,15 +9,23 @@ using OpenTK;
 
 namespace LightGameEngine.Model
 {
-    public class ControllableObject:IModelObject,IGamepadInterface
+    public class ControllableObject:IModelObject, IAlignedShip,IGamepadInterface
     {
         private static double ANGLE_MOVE = 1;
         private ShipObject modObj;
         private bool firingEngines;
 
+        public event OnDeathHandler OnDeath;
+
+        public void OnDeathOfShip(object sender, OnDeathEventArgs e)
+        {
+            Console.WriteLine("YOU'RE DEAD!!!!!!!");
+        }
+
         public ControllableObject(ShipObject obj)
         {
             this.modObj = obj;
+            OnDeath += OnDeathOfShip;
             this.firingEngines = false;
         }
 
@@ -202,6 +210,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public double RadiusSquared
+        {
+            get
+            {
+                return ((IModelObject)modObj).RadiusSquared;
+            }
+        }
+
+        public Alignment ShipAlignment
+        {
+            get
+            {
+                return ((IAlignedShip)modObj).ShipAlignment;
+            }
+        }
+
         public void OnUpdate(FrameEventArgs e)
         {
             if(this.firingEngines)
@@ -296,14 +320,18 @@ namespace LightGameEngine.Model
         {
         }
 
-        public void Destroy()
-        {
-            ((IModelObject)modObj).Destroy();
-        }
-
         public bool EqualsOtherObject(IModelObject other)
         {
             return other.EqualsOtherObject(modObj);
+        }
+
+        public void Destroy(IModelObject destroyer)
+        {
+            if (!Destroyed)
+            {
+                modObj.Destroy(destroyer);
+                OnDeath(this, new OnDeathEventArgs(this, destroyer));
+            }
         }
     }
 }

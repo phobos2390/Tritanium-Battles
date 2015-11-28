@@ -74,7 +74,8 @@ namespace ObjLoader.Loader.Loaders
                                  Textures = _dataStore.Textures,
                                  Normals = _dataStore.Normals,
                                  Groups = _dataStore.Groups,
-                                 Materials = _dataStore.Materials
+                                 Materials = _dataStore.Materials,
+                                 RadiusSquared = _dataStore.RadiusSquared
                              };
             return result;
         }

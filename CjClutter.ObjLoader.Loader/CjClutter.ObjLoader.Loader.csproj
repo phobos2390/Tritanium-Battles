@@ -40,6 +40,9 @@
     <OutputPath>bin\x86\Release\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BulletSharp">
+      <HintPath>..\..\..\..\Visual Studio 2013\Projects\LightGameEngine\LightGameEngine\bin\Debug\BulletSharp.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />

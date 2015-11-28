@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LightGameEngine", "LightGam
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TritaniumBattles", "TritaniumBattles\TritaniumBattles.csproj", "{F21B0E8F-96E2-448F-A5B4-5E69F0DE8812}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CjClutter.ObjLoader.Loader", "..\..\..\ObjLoader-master\ObjLoader-master\source\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj", "{1FD37682-98D6-442F-8E15-646247C690DC}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "QuickFont", "QuickFont\QuickFont\QuickFont.csproj", "{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CjClutter.ObjLoader.Loader", "CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj", "{1FD37682-98D6-442F-8E15-646247C690DC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,14 +37,6 @@ Global
 		{F21B0E8F-96E2-448F-A5B4-5E69F0DE8812}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F21B0E8F-96E2-448F-A5B4-5E69F0DE8812}.Release|x86.ActiveCfg = Release|Any CPU
 		{F21B0E8F-96E2-448F-A5B4-5E69F0DE8812}.Release|x86.Build.0 = Release|Any CPU
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|x86.ActiveCfg = Debug|x86
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|x86.Build.0 = Debug|x86
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|x86.ActiveCfg = Release|x86
-		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|x86.Build.0 = Release|x86
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Debug|x86.ActiveCfg = Debug|Any CPU
@@ -53,6 +45,14 @@ Global
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Release|x86.ActiveCfg = Release|Any CPU
 		{BBECE6FC-EF63-40F8-A734-A500D1DFC1AF}.Release|x86.Build.0 = Release|Any CPU
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|x86.ActiveCfg = Debug|x86
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Debug|x86.Build.0 = Debug|x86
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|x86.ActiveCfg = Release|x86
+		{1FD37682-98D6-442F-8E15-646247C690DC}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

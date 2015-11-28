@@ -40,10 +40,16 @@ namespace LightGameEngine.View
         private ControllableObject mainObject;
         private int gamePadIndex;
 
+        public void OnShipSight(object sender, OnSightEventArgs e)
+        {
+
+        }
+        
         public View(int gamePadIndex, Model.Model model, ControllableObject obj, int height, int width, Frustum viewFrustum, OpenTK.Graphics.GraphicsMode mode, string title)
             : base(width, height, mode, title)
         {
             this.mainObject = obj;
+            this.mainObject.ControlledObject.OnSight += OnShipSight;
             this.physics = new PhysicsController(model);
             
             this.gamePadIndex = gamePadIndex;
@@ -116,39 +122,54 @@ namespace LightGameEngine.View
         protected override void OnRenderFrame(FrameEventArgs e)
         {
             base.OnRenderFrame(e);
-            
+
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
-            
-            GL.MatrixMode(MatrixMode.Modelview);
-            //GL.LoadMatrix(ref modelview);
 
-            GL.LoadIdentity();
-            camOrientation.Invert();
-            Vector3d rotationAxis = new Vector3d();
-            double rotationAngle = 0;
-            camOrientation.ToAxisAngle(out rotationAxis, out rotationAngle);
-            Angle rotation = Angle.CreateRadian(rotationAngle);
-            GL.Rotate(rotation.Degrees, rotationAxis);
-            GL.Translate(-position);
-
-            foreach (IModelObject obj in this.model.Objects)
+            if (this.model.Objects.Count <= 1)
             {
-                //if(mainObject != obj)
-                //{
-                    ModelDrawer.Draw(obj);
-                //}
+                QFont.Begin();
+                font.Print("Nobody Else is Here", new Vector2(Height / 2, Width / 2));
+                QFont.End();
             }
+            if(this.mainObject.Destroyed)
+            {
+                QFont.Begin();
+                font.Print("Game Over", new Vector2(Height/2, Width/2));
+                QFont.End();
+            }
+            else
+            {
+                GL.MatrixMode(MatrixMode.Modelview);
+                //GL.LoadMatrix(ref modelview);
 
-            QFont.Begin();
-            font.Print("Missiles ( " + mainObject.LeftMissiles + "," + mainObject.RightMissiles + " ) ", new Vector2(0, 0));
-            font.Print("High Missiles ( " + mainObject.LeftHighMissiles + "," + mainObject.RightHighMissiles + " ) ", new Vector2(0, 25));
-            font.Print("Fire Mode: " + mainObject.FireMode, new Vector2(0,50));
-            font.Print("Fire Type: " + mainObject.MissileType, new Vector2(0, 75));
-            font.Print("Velocity: (" + (int)mainObject.Velocity.X + "," + (int)mainObject.Velocity.Y + "," + (int)mainObject.Velocity.Z + ")", new Vector2(0, 100));
-            font.Print("Position: (" + (int)mainObject.Position.X + "," + (int)mainObject.Position.Y + "," + (int)mainObject.Position.Z + ")", new Vector2(0, 125));
-            QFont.End();
+                GL.LoadIdentity();
+                camOrientation.Invert();
+                Vector3d rotationAxis = new Vector3d();
+                double rotationAngle = 0;
+                camOrientation.ToAxisAngle(out rotationAxis, out rotationAngle);
+                Angle rotation = Angle.CreateRadian(rotationAngle);
+                GL.Rotate(rotation.Degrees, rotationAxis);
+                GL.Translate(-position);
 
-            GL.Disable(EnableCap.Texture2D);
+                foreach (IModelObject obj in this.model.Objects)
+                {
+                    //if(mainObject != obj)
+                    //{
+                    ModelDrawer.Draw(obj);
+                    //}
+                }
+
+                QFont.Begin();
+                font.Print("Missiles ( " + mainObject.LeftMissiles + "," + mainObject.RightMissiles + " ) ", new Vector2(0, 0));
+                font.Print("High Missiles ( " + mainObject.LeftHighMissiles + "," + mainObject.RightHighMissiles + " ) ", new Vector2(0, 25));
+                font.Print("Fire Mode: " + mainObject.FireMode, new Vector2(0, 50));
+                font.Print("Fire Type: " + mainObject.MissileType, new Vector2(0, 75));
+                font.Print("Velocity: (" + (int)mainObject.Velocity.X + "," + (int)mainObject.Velocity.Y + "," + (int)mainObject.Velocity.Z + ")", new Vector2(0, 100));
+                font.Print("Position: (" + (int)mainObject.Position.X + "," + (int)mainObject.Position.Y + "," + (int)mainObject.Position.Z + ")", new Vector2(0, 125));
+                QFont.End();
+
+                GL.Disable(EnableCap.Texture2D);
+            }
             SwapBuffers();
         }
 

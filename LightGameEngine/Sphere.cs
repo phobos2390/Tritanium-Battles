@@ -10,19 +10,18 @@ namespace LightGameEngine.Collision
     public class Sphere : IIntersectableShape
     {
         private Vector3d center;
-        private double radius;
+        private double radiusSquared;
 
-        public Sphere(Vector3d center, double radius)
+        public Sphere(Vector3d center, double radiusSquared)
         {
             this.center = center;
-            this.radius = radius;
+            this.radiusSquared = radiusSquared;
         }
 
         public Tuple<bool,Vector3d, double,double,double> IntersectionVals(Vector3d initial, Vector3d ray)
         {
             Vector3d c = center - initial;
             double crossLengthSquared = Vector3d.Cross(ray, c).LengthSquared;
-            double radiusSquared = radius * radius;
             bool intersects = false;
             if(crossLengthSquared <= radiusSquared * ray.LengthSquared && Vector3d.Dot(c, ray) >= 0)
             {
@@ -63,7 +62,7 @@ namespace LightGameEngine.Collision
 
         public Vector3d Normal(Vector3d intersection)
         {
-            return Vector3d.Divide(intersection - center, radius);
+            return Vector3d.Divide(intersection - center, Math.Sqrt(this.radiusSquared));
         }
 
         public Vector3d FindRefractionIntersection(Vector3d intersection,Vector3d ray)

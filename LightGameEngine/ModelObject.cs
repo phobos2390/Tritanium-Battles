@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using OpenTK;
+using ObjLoader.Loader.Loaders;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using ObjLoader.Loader.Data;
-using ObjLoader.Loader.Loaders;
-using OpenTK;
 
 namespace LightGameEngine.Model
 {
     public class ModelObject : IModelObject
     {
+        public event OnDeathHandler OnDeath;
+
         private static int currIndex = 0;
 
         private double mass;
@@ -27,6 +29,12 @@ namespace LightGameEngine.Model
         private IList<Material> materials;
         private bool destroyed;
         private int index;
+        private double radiusSquared;
+
+        public void HandleOnDeath(object sender, OnDeathEventArgs e)
+        {
+            Console.WriteLine("He's dying");
+        }
 
         public ModelObject(LoadResult result, double mass, Quaterniond orientation, Vector3d position)
         {
@@ -35,12 +43,14 @@ namespace LightGameEngine.Model
             this.vertices = result.Vertices;
             this.textures = result.Textures;
             this.materials = result.Materials;
+            this.radiusSquared = result.RadiusSquared;
             this.mass = mass;
             this.orientation = orientation;
             this.position = position;
             this.velocity = Vector3d.Zero;
             this.destroyed = false;
             this.index = currIndex++;
+            OnDeath += HandleOnDeath;
         }
 
         public ModelObject(LoadResult result, double mass)
@@ -70,11 +80,12 @@ namespace LightGameEngine.Model
             netForce += force;
         }
 
-        public void Destroy()
+        public void Destroy(IModelObject destroyer)
         {
             if(!this.destroyed)
             {
                 this.destroyed = true;
+                OnDeath(this, new OnDeathEventArgs(this, destroyer));
             }
         }
 
@@ -169,6 +180,14 @@ namespace LightGameEngine.Model
             set
             {
                 this.velocity = value;
+            }
+        }
+
+        public double RadiusSquared
+        {
+            get
+            {
+                return this.radiusSquared;
             }
         }
 

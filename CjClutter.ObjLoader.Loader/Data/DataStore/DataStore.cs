@@ -4,6 +4,7 @@ using ObjLoader.Loader.Common;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using System.IO;
+using System;
 
 namespace ObjLoader.Loader.Data.DataStore
 {
@@ -14,10 +15,15 @@ namespace ObjLoader.Loader.Data.DataStore
 
         private readonly List<Group> _groups = new List<Group>();
         private readonly List<Material> _materials = new List<Material>();
-
         private readonly List<Vertex> _vertices = new List<Vertex>();
         private readonly List<Texture> _textures = new List<Texture>();
         private readonly List<Normal> _normals = new List<Normal>();
+        private double radiusSquared;
+
+        public DataStore()
+        {
+            radiusSquared = 0;
+        }
         
         public IList<Vertex> Vertices
         {
@@ -42,6 +48,11 @@ namespace ObjLoader.Loader.Data.DataStore
         public IList<Group> Groups
         {
             get { return _groups; }
+        }
+
+        public double RadiusSquared
+        {
+            get { return this.radiusSquared; }
         }
 
         public void AddFace(Face face)
@@ -73,6 +84,11 @@ namespace ObjLoader.Loader.Data.DataStore
 
         public void AddVertex(Vertex vertex)
         {
+            double newRadSquare = vertex.X * vertex.X + vertex.Y * vertex.Y + vertex.Z * vertex.Z;
+            if(newRadSquare > this.radiusSquared)
+            {
+                this.radiusSquared = newRadSquare;
+            }
             _vertices.Add(vertex);
         }
 

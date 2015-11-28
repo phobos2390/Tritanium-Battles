@@ -11,5 +11,6 @@ namespace ObjLoader.Loader.Data.DataStore
         IList<Normal> Normals { get; }
         IList<Material> Materials { get; }
         IList<Group> Groups { get; }
+        double RadiusSquared { get; }
     }
 }
