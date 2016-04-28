@@ -11,46 +11,44 @@ namespace LightGameEngine
     public class FightingState : IComputerState
     {
         private const double MAXUNSEENTIME = 10;
+        private const double WEAPONCOOLDOWN = 0.25;
 
         private double timeSinceLastSeen;
+        private double coolingDown;
         private IComputerState afterDone;
-        private IComputerStateMachine machine;
         private IModelObject opponent;
 
-        public IComputerStateMachine Machine
+        public FightingState(IComputerState afterDone)
         {
-            set
-            {
-                this.machine = value;
-            }
-        }
-
-        public FightingState(IComputerStateMachine machine, IComputerState afterDone)
-        {
-            this.machine = machine;
             this.afterDone = afterDone;
         }
 
-        public void OnSeesOpponent(IModelObject opponent)
+        public void OnSeesOpponent(IModelObject opponent, IComputerStateMachine machine)
         {
-            machine.FireWeapons();
+            if(coolingDown < 0)
+            {
+                Console.WriteLine("Firing weapons");
+                machine.FireWeapons();
+                coolingDown = WEAPONCOOLDOWN;
+            }
             this.opponent = opponent;
             timeSinceLastSeen = MAXUNSEENTIME;
         }
 
-        public void OnOpponentDestroyed()
+        public void OnOpponentDestroyed(IComputerStateMachine machine)
         {
             machine.UpdateState(afterDone);
         }
 
-        public void OnUpdate(FrameEventArgs e)
+        public void OnUpdate(FrameEventArgs e, IComputerStateMachine machine)
         {
+            coolingDown -= e.Time;
             timeSinceLastSeen -= e.Time;
             if(timeSinceLastSeen <= 0)
             {
                 machine.UpdateState(afterDone);
             }
-            if(this.opponent != null)
+            if(opponent != null)
             {
                 machine.TurnTowardsPoint(this.opponent.Position, e.Time);
             }

@@ -21,21 +21,21 @@ namespace LightGameEngine.Controller
         {
             model.OnUpdate(e);
 
-            foreach(Model.IModelObject modObj in model.Objects)
-            {
-                foreach (Model.IModelObject modObj2 in model.Objects)
-                {
-                    if(modObj != modObj2)
-                    {
-                        Vector3d displacement = modObj2.Position - modObj.Position;
-                        double r = displacement.LengthSquared;
-                        double m1m2 = modObj.Mass * modObj2.Mass;
-                        displacement.Normalize();
-                        displacement = Vector3d.Multiply(displacement, GRAVITATIONAL_CONST * m1m2 / r);
-                        modObj.AddForce(displacement);
-                    }
-                }
-            }
+            //foreach(Model.IModelObject modObj in model.Objects)
+            //{
+            //    foreach (Model.IModelObject modObj2 in model.Objects)
+            //    {
+            //        if(modObj != modObj2)
+            //        {
+            //            Vector3d displacement = modObj2.Position - modObj.Position;
+            //            double r = displacement.LengthSquared;
+            //            double m1m2 = modObj.Mass * modObj2.Mass;
+            //            displacement.Normalize();
+            //            displacement = Vector3d.Multiply(displacement, GRAVITATIONAL_CONST * m1m2 / r);
+            //            modObj.AddForce(displacement);
+            //        }
+            //    }
+            //}
         }
     }
 }

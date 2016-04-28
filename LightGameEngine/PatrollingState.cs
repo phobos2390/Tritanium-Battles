@@ -15,43 +15,21 @@ namespace LightGameEngine
 
         private IList<Vector3d> wayPoints;
         private int wayPointIter;
-        private IComputerState fightingState;
-        private IComputerStateMachine machine;
+        private IPatrollingStateOnSeesOpponentStrategy onSeesOpponentStrategy;
 
-        public PatrollingState(IList<Vector3d> wayPoints, IComputerStateMachine machine, IComputerState fightingState)
+        public PatrollingState(IList<Vector3d> wayPoints,IPatrollingStateOnSeesOpponentStrategy onSeesOpponentStrategy)
         {
             this.wayPoints = wayPoints;
-            this.fightingState = fightingState;
-            this.machine = machine;
-            this.wayPointIter = 0;
+            wayPointIter = 0;
+            this.onSeesOpponentStrategy = onSeesOpponentStrategy;
         }
 
-        public IComputerState FightingState
+        public void OnSeesOpponent(IModelObject opponent, IComputerStateMachine machine)
         {
-            set
-            {
-                this.fightingState = value;
-            }
+            onSeesOpponentStrategy.OnSeesOpponent(this, opponent, machine);
         }
 
-        public IComputerStateMachine Machine
-        {
-            set
-            {
-                this.machine = value;
-            }
-        }
-
-        public void OnSeesOpponent(IModelObject opponent)
-        {
-            if(fightingState != this)
-            {
-                fightingState.OnSeesOpponent(opponent);
-            }
-            machine.UpdateState(fightingState);
-        }
-
-        public void OnUpdate(FrameEventArgs e)
+        public void OnUpdate(FrameEventArgs e, IComputerStateMachine machine)
         {
             if(Sphere.PointInSphere(wayPoints[wayPointIter],machine.Position, MAXWPTDISTSQUARED))
             {

@@ -10,8 +10,7 @@ namespace LightGameEngine
 {
     public interface IComputerState
     {
-        void OnUpdate(FrameEventArgs e);
-        void OnSeesOpponent(IModelObject opponent);
-        IComputerStateMachine Machine { set; }
+        void OnUpdate(FrameEventArgs e, IComputerStateMachine machine);
+        void OnSeesOpponent(IModelObject opponent, IComputerStateMachine machine);
     }
 }

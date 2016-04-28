@@ -9,6 +9,7 @@ using LightGameEngine.View;
 using LightGameEngine.Model;
 using OpenTK;
 using ObjLoader.Loader;
+using Newtonsoft.Json;
 
 namespace TritaniumBattles
 {
@@ -19,7 +20,7 @@ namespace TritaniumBattles
         static double HEIGHT = 650;
         static double WIDTH = 1000;
         static double NEAR = 1;
-        static double FAR = 2000;
+        static double FAR = 20000;
         static double FOVY = 90;
         static string TITLE = "Tritanium Battles";
         
@@ -27,12 +28,32 @@ namespace TritaniumBattles
         {
             ModelObjectFactory fact = new ModelObjectFactory();
             Model model = new Model();
-            model.AddModelObject(ModelObjectFactory.CreateModel(ModelTypes.Asteroid, Quaterniond.Identity, new Vector3d(0, 0, -1000)));
+            model.AddModelObject(fact.CreateAsteroid(Quaterniond.Identity, new Vector3d(0, 0, -1000)));
+            Console.WriteLine("Added an asteroid");
             //model.AddModelObject(fact.CreateUnarmedAI(ModelTypes.Carpo, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
-            //model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
-            //model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV5, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV3");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV3");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV3");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV3");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV3");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.MSFV5, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added MSFV5");
             model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
-            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV5, model, Quaterniond.Identity, ModelObjectFactory.randVec());
+            Console.WriteLine("Added CarpoRefit");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added CarpoRefit");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added CarpoRefit");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added CarpoRefit");
+            model.AddModelObject(fact.CreateAIOpponent(ModelTypes.CarpoRefit, model, Quaterniond.Identity, ModelObjectFactory.randVec()));
+            Console.WriteLine("Added CarpoRefit");
+            ControllableObject obj = fact.CreateControlledObject(ModelTypes.MSFV3, model, Quaterniond.Identity, ModelObjectFactory.randVec());
             model.AddModelObject(obj);
             View view = new View(0,model, obj, (int)HEIGHT, (int)WIDTH, new Frustum(Angle.CreateDegree(FOVY),(double)WIDTH / HEIGHT,NEAR,FAR), TITLE);
             Console.WriteLine("Loading done.");

@@ -37,6 +37,10 @@
     <Reference Include="CjClutter.ObjLoader.Loader">
       <HintPath>..\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
@@ -54,19 +58,45 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AbstractComplementDirector.cs" />
+    <Compile Include="AbstractMissileDirector.cs" />
+    <Compile Include="AbstractShipDirector.cs" />
     <Compile Include="Alignment.cs" />
     <Compile Include="Angle.cs" />
+    <Compile Include="AsteroidDirector.cs" />
+    <Compile Include="AudioController.cs" />
+    <Compile Include="CarpoMissileArrayDirector.cs" />
+    <Compile Include="CarpoRefitDirector.cs" />
     <Compile Include="ComputerControlledOpponent.cs" />
+    <Compile Include="ComputerControlledOpponentBuilder.cs" />
+    <Compile Include="ComputerStateMachineBuilder.cs" />
     <Compile Include="FightingState.cs" />
+    <Compile Include="HighMissileDirector.cs" />
     <Compile Include="IAlignedShip.cs" />
+    <Compile Include="IComplementDirector.cs" />
     <Compile Include="IComputerState.cs" />
     <Compile Include="IComputerStateMachine.cs" />
     <Compile Include="IIntersectableShape.cs" />
+    <Compile Include="IMissileDirector.cs" />
+    <Compile Include="IPatrollingStateOnSeesOpponentStrategy.cs" />
+    <Compile Include="IShipDirector.cs" />
     <Compile Include="KeyboardController.cs" />
+    <Compile Include="MeshLoader.cs" />
+    <Compile Include="MissileArrayBuilder.cs" />
+    <Compile Include="MissileBuilder.cs" />
+    <Compile Include="MSFV3Director.cs" />
+    <Compile Include="MSFV3MissileArrayDirector.cs" />
+    <Compile Include="MSFV5Director.cs" />
+    <Compile Include="MSFV5MissileArrayDirector.cs" />
+    <Compile Include="StandardMissileDirector.cs" />
+    <Compile Include="ModelObjectBuilder.cs" />
+    <Compile Include="MovesToFightingStateStrategy.cs" />
     <Compile Include="OnDeathEventArgs.cs" />
     <Compile Include="OnSightEventArgs.cs" />
     <Compile Include="PatrollingState.cs" />
+    <Compile Include="PropelledObjectBuilder.cs" />
     <Compile Include="ShipListener.cs" />
+    <Compile Include="ShipObjectBuilder.cs" />
     <Compile Include="Sphere.cs" />
     <Compile Include="ControllableObject.cs" />
     <Compile Include="IGamepadInterface.cs" />
@@ -85,10 +115,13 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PropelledObject.cs" />
     <Compile Include="ShipObject.cs" />
+    <Compile Include="StaysInPatrollingStateStrategy.cs" />
     <Compile Include="View.cs" />
     <Compile Include="MissileArray.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

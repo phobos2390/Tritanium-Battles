@@ -10,42 +10,34 @@ namespace LightGameEngine.Model
     public class MissileArray
     {
         private int numberOfMissiles;
-        private double massOfMissiles;
-        private double blastRadius;
         private double thrust;
-        private double fuel;
-        private Vector3d positionOffset;
-        private IMissileFactory factory;
-        private ModelTypes missileTypes;
         private Model model;
         private IModelObject firedBy;
 
-        public MissileArray(int missiles, double massOfMissiles, double blastRadius, double thrust, double fuel, IModelObject firedBy, Vector3d positionOffset, ModelTypes missileType, Model model, IMissileFactory factory)
+        private IMissileDirector director;
+
+        public MissileArray(int missiles, IMissileDirector director, Model model, IModelObject firedBy, double thrust)
         {
-            this.positionOffset = positionOffset;
-            this.numberOfMissiles = missiles;
-            this.massOfMissiles = massOfMissiles;
-            this.blastRadius = blastRadius;
-            this.thrust = thrust;
-            this.fuel = fuel;
-            this.factory = factory;
-            this.missileTypes = missileType;
+            numberOfMissiles = missiles;
+            this.director = director;
             this.model = model;
             this.firedBy = firedBy;
+            this.thrust = thrust;
         }
 
         public void Fire()
         {
-            if(this.numberOfMissiles-- > 0)
+            if(numberOfMissiles-- > 0)
             {
-                this.factory.CreateMissile(this.firedBy, Vector3d.Transform(this.positionOffset,this.firedBy.Orientation), blastRadius, thrust, fuel, massOfMissiles, missileTypes, model);
-                Vector3d accelVector = Vector3d.Transform(Vector3d.UnitZ,this.firedBy.Orientation);
+                Missile missile = director.CreateMissile();
+                model.AddModelObject(missile);
+                Vector3d accelVector = Vector3d.Transform(Vector3d.UnitZ,firedBy.Orientation);
                 accelVector.NormalizeFast();
-                this.firedBy.AddForce(Vector3d.Multiply(accelVector, thrust));
+                firedBy.AddForce(Vector3d.Multiply(accelVector, thrust));
             }
             else
             {
-                this.numberOfMissiles = 0;
+                numberOfMissiles = 0;
             }
         }
 
@@ -53,7 +45,7 @@ namespace LightGameEngine.Model
         {
             get
             {
-                return this.numberOfMissiles;
+                return numberOfMissiles;
             }
         }
     }

@@ -26,7 +26,7 @@ namespace LightGameEngine
                 IAlignedShip otherShip = (IAlignedShip) e.SeenObject;
                 if(otherShip.ShipAlignment != controlled.ShipAlignment)
                 {
-                    currentState.OnSeesOpponent(e.SeenObject);
+                    currentState.OnSeesOpponent(e.SeenObject, this);
                 }
             }
         }
@@ -171,7 +171,7 @@ namespace LightGameEngine
         public void OnUpdate(FrameEventArgs e)
         {
             ((IModelObject)controlled).OnUpdate(e);
-            this.currentState.OnUpdate(e);
+            currentState.OnUpdate(e,this);
         }
 
         void IComputerStateMachine.FireEngines()
@@ -181,7 +181,6 @@ namespace LightGameEngine
 
         void IComputerStateMachine.FireWeapons()
         {
-            controlled.FireWeapon();
             controlled.FireWeapon();
         }
 
@@ -194,13 +193,33 @@ namespace LightGameEngine
                 Vector3d rotationAxis = Vector3d.Cross(currRay, toLookTowards);
                 Sphere sphere = new Sphere(point, RadiusSquared);
                 rotationAxis.NormalizeFast();
-                Angle angleOfRotation = Angle.ArcCosine(Vector3d.Dot(currRay, toLookTowards), currRay.LengthFast * toLookTowards.LengthFast);
-                Quaterniond lookingAtOrientation = Quaterniond.FromAxisAngle(rotationAxis, angleOfRotation.Radians);
-                lookingAtOrientation = lookingAtOrientation * Orientation;
-                Orientation = Quaterniond.Slerp(Orientation, lookingAtOrientation, Math.Min(TURNSPEED * time, 1));
-                if(sphere.Intersects(Position, currRay).Item1)
+                if(Velocity.LengthSquared > 0)
                 {
-                    ((IComputerStateMachine)this).FireEngines();
+                    Vector3d velocityDirection = Velocity;
+                    velocityDirection.NormalizeFast();
+                    currRay.NormalizeFast();
+                    Vector3d normalizedLooking = toLookTowards;
+                    normalizedLooking.NormalizeFast();
+                    Vector3d turningTowards = normalizedLooking - velocityDirection;
+                    Angle angleOfRotation = Angle.ArcCosine(Vector3d.Dot(currRay, turningTowards), currRay.LengthFast * turningTowards.LengthFast);
+                    Quaterniond lookingAtOrientation = Quaterniond.FromAxisAngle(rotationAxis, angleOfRotation.Radians);
+                    lookingAtOrientation = lookingAtOrientation * Orientation;
+                    Orientation = Quaterniond.Slerp(Orientation, lookingAtOrientation, Math.Min(TURNSPEED * time, 1));
+                    if (sphere.Intersects(point, currRay + velocityDirection).Item1)
+                    {
+                        ((IComputerStateMachine)this).FireEngines();
+                    }
+                }
+                else
+                {
+                    Angle angleOfRotation = Angle.ArcCosine(Vector3d.Dot(currRay, toLookTowards), currRay.LengthFast * toLookTowards.LengthFast);
+                    Quaterniond lookingAtOrientation = Quaterniond.FromAxisAngle(rotationAxis, angleOfRotation.Radians);
+                    lookingAtOrientation = lookingAtOrientation * Orientation;
+                    Orientation = Quaterniond.Slerp(Orientation, lookingAtOrientation, Math.Min(TURNSPEED * time, 1));
+                    if (sphere.Intersects(point, currRay).Item1)
+                    {
+                        ((IComputerStateMachine)this).FireEngines();
+                    }
                 }
             }
         }

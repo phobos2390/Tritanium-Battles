@@ -128,19 +128,18 @@ namespace LightGameEngine.View
             if (this.model.Objects.Count <= 1)
             {
                 QFont.Begin();
-                font.Print("Nobody Else is Here", new Vector2(Height / 2, Width / 2));
+                font.Print("Nobody Else is Here", new Vector2(Width / 2, Height / 2));
                 QFont.End();
             }
             if(this.mainObject.Destroyed)
             {
                 QFont.Begin();
-                font.Print("Game Over", new Vector2(Height/2, Width/2));
+                font.Print("Game Over", new Vector2(Width / 2, Height / 2));
                 QFont.End();
             }
             else
             {
                 GL.MatrixMode(MatrixMode.Modelview);
-                //GL.LoadMatrix(ref modelview);
 
                 GL.LoadIdentity();
                 camOrientation.Invert();
@@ -153,10 +152,7 @@ namespace LightGameEngine.View
 
                 foreach (IModelObject obj in this.model.Objects)
                 {
-                    //if(mainObject != obj)
-                    //{
                     ModelDrawer.Draw(obj);
-                    //}
                 }
 
                 QFont.Begin();
