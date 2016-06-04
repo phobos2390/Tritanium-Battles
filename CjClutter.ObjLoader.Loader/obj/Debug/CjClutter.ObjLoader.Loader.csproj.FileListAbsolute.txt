@@ -11,3 +11,9 @@ C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.O
 C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.csprojResolveAssemblyReference.cache
 C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\bin\Debug\Newtonsoft.Json.dll
 C:\Users\James\Documents\Visual Studio 2013\Projects\LightGameEngine\CjClutter.ObjLoader.Loader\bin\Debug\Newtonsoft.Json.xml
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Debug\Newtonsoft.Json.dll
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Debug\Newtonsoft.Json.xml
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.dll
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.pdb

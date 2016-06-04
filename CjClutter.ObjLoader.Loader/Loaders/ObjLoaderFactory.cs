@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using ObjLoader.Loader.Data.DataStore;
 using ObjLoader.Loader.TypeParsers;
@@ -13,10 +14,20 @@ namespace ObjLoader.Loader.Loaders
     {
         public IObjLoader Create()
         {
-            return Create(new MaterialStreamProvider());
+            return Create("");
         }
 
         public IObjLoader Create(IMaterialStreamProvider materialStreamProvider)
+        {
+            return Create("", materialStreamProvider);
+        }
+
+        public IObjLoader Create(string mtlDirectory)
+        {
+            return Create(mtlDirectory, new MaterialStreamProvider());
+        }
+
+        public IObjLoader Create(string mtlDirectory, IMaterialStreamProvider materialStreamProvider)
         {
             var dataStore = new DataStore();
             
@@ -29,7 +40,7 @@ namespace ObjLoader.Loader.Loaders
             var objectGroupParser = new ObjectGroupParser(dataStore);
 
             var materialLibraryLoader = new MaterialLibraryLoader(dataStore);
-            var materialLibraryLoaderFacade = new MaterialLibraryLoaderFacade(materialLibraryLoader, materialStreamProvider);
+            var materialLibraryLoaderFacade = new MaterialLibraryLoaderFacade(mtlDirectory, materialLibraryLoader, materialStreamProvider);
             var materialLibraryParser = new MaterialLibraryParser(materialLibraryLoaderFacade);
             var useMaterialParser = new UseMaterialParser(dataStore);
 
