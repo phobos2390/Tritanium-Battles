@@ -62,7 +62,6 @@
     <Compile Include="Model\Creational\Directors\AbstractMissileDirector.cs" />
     <Compile Include="Model\Creational\Directors\AbstractShipDirector.cs" />
     <Compile Include="Model\Alignment.cs" />
-    <Compile Include="Angle.cs" />
     <Compile Include="Model\Creational\Directors\AsteroidDirector.cs" />
     <Compile Include="Controller\AudioController.cs" />
     <Compile Include="Model\Creational\Directors\CarpoMissileArrayDirector.cs" />
@@ -74,11 +73,12 @@
     <Compile Include="Model\Explosion.cs" />
     <Compile Include="Model\FightingState.cs" />
     <Compile Include="Model\Creational\Directors\HighMissileDirector.cs" />
+    <Compile Include="Model\Force.cs" />
+    <Compile Include="Model\ForceTracker.cs" />
     <Compile Include="Model\IAlignedShip.cs" />
     <Compile Include="Model\Creational\IComplementDirector.cs" />
     <Compile Include="Model\IComputerState.cs" />
     <Compile Include="Model\IComputerStateMachine.cs" />
-    <Compile Include="Model\IIntersectableShape.cs" />
     <Compile Include="Model\Creational\IMissileDirector.cs" />
     <Compile Include="Model\IPatrollingStateOnSeesOpponentStrategy.cs" />
     <Compile Include="Model\Creational\IShipDirector.cs" />
@@ -99,13 +99,11 @@
     <Compile Include="Model\Creational\Builders\PropelledObjectBuilder.cs" />
     <Compile Include="Model\ShipListener.cs" />
     <Compile Include="Model\Creational\Builders\ShipObjectBuilder.cs" />
-    <Compile Include="Sphere.cs" />
     <Compile Include="Model\ControllableObject.cs" />
     <Compile Include="Model\IGamepadInterface.cs" />
     <Compile Include="Model\Creational\IMissileFactory.cs" />
     <Compile Include="Model\Missile.cs" />
     <Compile Include="Model\ModelTypes.cs" />
-    <Compile Include="View\Frustum.cs" />
     <Compile Include="Controller\GamePadController.cs" />
     <Compile Include="Model\IModelObject.cs" />
     <Compile Include="Model\Model.cs" />
@@ -113,7 +111,6 @@
     <Compile Include="Model\ModelObject.cs" />
     <Compile Include="Model\Creational\ModelObjectFactory.cs" />
     <Compile Include="Controller\PhysicsController.cs" />
-    <Compile Include="Polygon.cs" />
     <Compile Include="Model\PropelledObject.cs" />
     <Compile Include="Model\ShipObject.cs" />
     <Compile Include="Model\StaysInPatrollingStateStrategy.cs" />
@@ -127,6 +124,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GeometryLibrary\GeometryLibrary.csproj">
+      <Project>{4f0a3b2b-ee06-439c-8e8a-1e08abb6dab2}</Project>
+      <Name>GeometryLibrary</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

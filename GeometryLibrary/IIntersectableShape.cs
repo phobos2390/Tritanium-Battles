@@ -1,7 +1,7 @@
 ﻿using System;
 using OpenTK;
 
-namespace LightGameEngine.Collision
+namespace GeometryLibrary
 {
     public interface IIntersectableShape
     {

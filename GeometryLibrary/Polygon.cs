@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 
-namespace LightGameEngine.Collision
+namespace GeometryLibrary
 {
     public class Polygon:IIntersectableShape
     {

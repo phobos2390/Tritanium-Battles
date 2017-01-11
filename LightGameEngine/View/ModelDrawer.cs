@@ -11,6 +11,7 @@ using OpenTK;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Drawing.Imaging;
+using GeometryLibrary;
 
 namespace LightGameEngine.Model
 {
@@ -48,7 +49,7 @@ namespace LightGameEngine.Model
                     GL.Color3(g.Material.SpecularColor.X,
                        g.Material.SpecularColor.Y,
                        g.Material.SpecularColor.Z);
-                    GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.Emission);
+//                    GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.Emission);
                     for (int i = 0; i < f.Count; i++)
                     {
                         var vertex = objectToDraw.Vertices[f[i].VertexIndex - 1];

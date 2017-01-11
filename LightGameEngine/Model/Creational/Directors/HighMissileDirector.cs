@@ -10,7 +10,7 @@ namespace LightGameEngine.Model
     class HighMissileDirector:AbstractMissileDirector
     {
         private static double MISSTHRUST = 1000;
-        private static double MISSFUEL = 10;
+        private static double MISSFUEL = .25;
         private static double HMSSLMASS = .5;
         private static double HMSSLRAD = 20;
         private static double SCALE = 1;

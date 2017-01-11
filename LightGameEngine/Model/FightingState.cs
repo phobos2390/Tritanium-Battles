@@ -11,7 +11,7 @@ namespace LightGameEngine
     public class FightingState : IComputerState
     {
         private const double MAXUNSEENTIME = 10;
-        private const double WEAPONCOOLDOWN = 0.25;
+        private const double WEAPONCOOLDOWN = 1;
 
         private double timeSinceLastSeen;
         private double coolingDown;

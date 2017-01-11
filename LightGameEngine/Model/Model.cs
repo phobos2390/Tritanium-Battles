@@ -1,4 +1,4 @@
-﻿using LightGameEngine.Collision;
+﻿using GeometryLibrary;
 using OpenTK;
 using System;
 using System.Collections.Generic;

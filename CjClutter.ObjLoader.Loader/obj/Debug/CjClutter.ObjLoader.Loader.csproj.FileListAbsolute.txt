@@ -17,3 +17,4 @@ C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Deb
 C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\bin\Debug\Newtonsoft.Json.xml
 C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.dll
 C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.pdb
+C:\Users\James\Source\Repos\Tritanium-Battles\CjClutter.ObjLoader.Loader\obj\Debug\CjClutter.ObjLoader.Loader.csprojResolveAssemblyReference.cache

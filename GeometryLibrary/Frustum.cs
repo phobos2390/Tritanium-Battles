@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenTK;
 
-namespace LightGameEngine
+namespace GeometryLibrary
 {
     public class Frustum
     {

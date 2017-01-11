@@ -10,6 +10,7 @@ using LightGameEngine.Model;
 using OpenTK;
 using ObjLoader.Loader;
 using Newtonsoft.Json;
+using GeometryLibrary;
 
 namespace TritaniumBattles
 {

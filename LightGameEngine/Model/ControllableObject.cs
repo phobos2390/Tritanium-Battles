@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using ObjLoader.Loader.Data.Elements;
 using ObjLoader.Loader.Data.VertexData;
 using OpenTK;
+using GeometryLibrary;
 
 namespace LightGameEngine.Model
 {

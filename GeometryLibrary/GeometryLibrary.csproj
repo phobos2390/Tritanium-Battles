@@ -4,17 +4,16 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{F21B0E8F-96E2-448F-A5B4-5E69F0DE8812}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{4F0A3B2B-EE06-439C-8E8A-1E08ABB6DAB2}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TritaniumBattles</RootNamespace>
-    <AssemblyName>TritaniumBattles</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <RootNamespace>GeometryLibrary</RootNamespace>
+    <AssemblyName>GeometryLibrary</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,7 +23,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -32,22 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>TritaniumBattles.Controller</StartupObject>
-  </PropertyGroup>
   <ItemGroup>
-    <Reference Include="BulletSharp">
-      <HintPath>..\LightGameEngine\bin\Debug\BulletSharp.dll</HintPath>
-    </Reference>
-    <Reference Include="CjClutter.ObjLoader.Loader">
-      <HintPath>..\CjClutter.ObjLoader.Loader\bin\Debug\CjClutter.ObjLoader.Loader.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json, Version=8.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.8.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
-      <HintPath>..\packages\OpenTK.1.1.1589.5942\lib\NET40\OpenTK.dll</HintPath>
+      <HintPath>..\packages\OpenTK.1.1.2349.61993\lib\NET40\OpenTK.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
@@ -60,23 +45,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller.cs" />
+    <Compile Include="Angle.cs" />
+    <Compile Include="FieldOfView.cs" />
+    <Compile Include="Frustum.cs" />
+    <Compile Include="IIntersectableShape.cs" />
+    <Compile Include="Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Sphere.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GeometryLibrary\GeometryLibrary.csproj">
-      <Project>{4f0a3b2b-ee06-439c-8e8a-1e08abb6dab2}</Project>
-      <Name>GeometryLibrary</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\LightGameEngine\LightGameEngine.csproj">
-      <Project>{5dcaf87a-1e4d-47e0-99f3-a110fa1cde59}</Project>
-      <Name>LightGameEngine</Name>
+    <ProjectReference Include="..\CjClutter.ObjLoader.Loader\CjClutter.ObjLoader.Loader.csproj">
+      <Project>{1fd37682-98d6-442f-8e15-646247c690dc}</Project>
+      <Name>CjClutter.ObjLoader.Loader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

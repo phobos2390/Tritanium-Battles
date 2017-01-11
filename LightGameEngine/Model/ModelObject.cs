@@ -34,7 +34,6 @@ namespace LightGameEngine.Model
 
         public void HandleOnDeath(object sender, OnDeathEventArgs e)
         {
-            Console.WriteLine("He's dying");
         }
 
         public ModelObject(LoadResult result, double mass, double scale, Quaterniond orientation, Vector3d position)
@@ -80,8 +79,8 @@ namespace LightGameEngine.Model
 
         public virtual void OnUpdate(FrameEventArgs e)
         {
+            position += velocity * e.Time + 0.5 * (netForce / mass * e.Time);
             velocity += netForce / mass * e.Time;
-            position += velocity * e.Time;
             netForce = Vector3d.Zero;
         }
 

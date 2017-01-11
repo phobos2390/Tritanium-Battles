@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using LightGameEngine.Model;
-using LightGameEngine.Collision;
+using GeometryLibrary;
 
 namespace LightGameEngine
 {

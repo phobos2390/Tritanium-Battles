@@ -9,13 +9,14 @@ using LightGameEngine.Model;
 using LightGameEngine.Controller;
 using QuickFont;
 using System.Drawing;
+using GeometryLibrary;
 
 namespace LightGameEngine.View
 {
     public class View : GameWindow
     {
         private static float Light_X = 0;
-        private static float Light_Y = 1;
+        private static float Light_Y = -1;
         private static float Light_Z = 0;
 
         private QFont font;
@@ -74,6 +75,7 @@ namespace LightGameEngine.View
             GL.Enable(EnableCap.Lighting);
             GL.Enable(EnableCap.Light0);
             GL.Enable(EnableCap.PolygonSmooth);
+            GL.Enable(EnableCap.LineSmooth);
 
             Vector4 lightPos = new Vector4(Light_X, Light_Y, Light_Z, 0);
 
@@ -147,6 +149,9 @@ namespace LightGameEngine.View
                 double rotationAngle = 0;
                 camOrientation.ToAxisAngle(out rotationAxis, out rotationAngle);
                 Angle rotation = Angle.CreateRadian(rotationAngle);
+
+                GL.PushMatrix();
+
                 GL.Rotate(rotation.Degrees, rotationAxis);
                 GL.Translate(-position);
 
@@ -155,12 +160,55 @@ namespace LightGameEngine.View
                     ModelDrawer.Draw(obj);
                 }
 
+                GL.PopMatrix();
+
+                GL.Begin(PrimitiveType.Lines);
+                GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
+                GL.Color3(Color.Yellow);
+                GL.LineWidth(6);
+                Vector3d initialPoint = new Vector3d(0, 0, -2);
+                Vector3d finalPoint = Vector3d.Transform(mainObject.Velocity, camOrientation);
+                GL.Vertex3(initialPoint);
+                GL.Vertex3(initialPoint + finalPoint.Normalized());
+                GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
+                GL.Color3(Color.Red);
+                GL.Vertex3(initialPoint + finalPoint.Normalized());
+                GL.Vertex3(initialPoint + finalPoint.Normalized() * 1.25);
+
+                Vector3d accelVector = Vector3d.Transform(-Vector3d.UnitZ, camOrientation);
+
+                GL.ColorMaterial(MaterialFace.FrontAndBack, ColorMaterialParameter.AmbientAndDiffuse);
+                var intersectVals = model.IntersectScene(position, accelVector, mainObject);
+                if(intersectVals.Item1 != null)
+                {
+                    GL.Color3(Color.Green);
+                }
+                else
+                {
+                    GL.Color3(Color.Blue);
+                }
+
+                GL.Vertex3(new Vector3d(.5, 0, -2));
+                GL.Vertex3(new Vector3d(.25, 0, -2));
+
+                GL.Vertex3(new Vector3d(-.5, 0, -2));
+                GL.Vertex3(new Vector3d(-.25, 0, -2));
+
+                GL.Vertex3(new Vector3d(0, .5, -2));
+                GL.Vertex3(new Vector3d(0, .25, -2));
+
+                GL.Vertex3(new Vector3d(0, -.5, -2));
+                GL.Vertex3(new Vector3d(0, -.25, -2));
+
+
+                GL.End();
+
                 QFont.Begin();
                 font.Print("Missiles ( " + mainObject.LeftMissiles + "," + mainObject.RightMissiles + " ) ", new Vector2(0, 0));
                 font.Print("High Missiles ( " + mainObject.LeftHighMissiles + "," + mainObject.RightHighMissiles + " ) ", new Vector2(0, 25));
                 font.Print("Fire Mode: " + mainObject.FireMode, new Vector2(0, 50));
                 font.Print("Fire Type: " + mainObject.MissileType, new Vector2(0, 75));
-                font.Print("Velocity: (" + (int)mainObject.Velocity.X + "," + (int)mainObject.Velocity.Y + "," + (int)mainObject.Velocity.Z + ")", new Vector2(0, 100));
+                font.Print("Velocity: (" + (int)mainObject.Velocity.Length + ")", new Vector2(0, 100));
                 font.Print("Position: (" + (int)mainObject.Position.X + "," + (int)mainObject.Position.Y + "," + (int)mainObject.Position.Z + ")", new Vector2(0, 125));
                 QFont.End();
 
