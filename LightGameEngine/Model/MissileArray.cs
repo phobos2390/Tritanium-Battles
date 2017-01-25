@@ -31,6 +31,7 @@ namespace LightGameEngine.Model
             {
                 Missile missile = director.CreateMissile();
                 model.AddModelObject(missile);
+                missile.Velocity = new Vector3d(firedBy.Velocity.X, firedBy.Velocity.Y, firedBy.Velocity.Z);
                 Vector3d accelVector = Vector3d.Transform(Vector3d.UnitZ,firedBy.Orientation);
                 accelVector.NormalizeFast();
                 firedBy.AddForce(Vector3d.Multiply(accelVector, thrust));

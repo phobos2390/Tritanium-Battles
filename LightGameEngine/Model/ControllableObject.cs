@@ -20,7 +20,7 @@ namespace LightGameEngine.Model
 
         public void OnDeathOfShip(object sender, OnDeathEventArgs e)
         {
-            Console.WriteLine("YOU'RE DEAD!!!!!!!");
+            Console.WriteLine(e.DestroyedObject.ToString() + " was killed by " + e.DestroyingObject.ToString());
         }
 
         public ControllableObject(ShipObject obj)
@@ -136,7 +136,7 @@ namespace LightGameEngine.Model
             Angle addRoll = Angle.CreateDegree(-ANGLE_MOVE * position.X);
             Angle addYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
             Quaterniond xRot = Quaterniond.FromAxisAngle(Vector3d.UnitX, addYaw.Radians);
-            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitZ, addRoll.Radians);
+            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitY, addRoll.Radians);
             Orientation = (Orientation * xRot * zRot).Normalized();
         }
 
@@ -145,7 +145,7 @@ namespace LightGameEngine.Model
             Angle addRoll = Angle.CreateDegree(-ANGLE_MOVE * position.X);
             Angle addYaw = Angle.CreateDegree(-ANGLE_MOVE * position.Y);
             Quaterniond xRot = Quaterniond.FromAxisAngle(Vector3d.UnitX, addYaw.Radians);
-            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitY, addRoll.Radians);
+            Quaterniond zRot = Quaterniond.FromAxisAngle(Vector3d.UnitZ, addRoll.Radians);
             Orientation = (Orientation * xRot * zRot).Normalized();
         }
 
@@ -237,21 +237,31 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
-            if(this.firingEngines)
+            if (!Destroyed)
             {
-                modObj.FireEngines();
+
+                if (this.firingEngines)
+                {
+                    modObj.FireEngines();
+                }
+                modObj.OnUpdate(e);
             }
-            modObj.OnUpdate(e);
         }
 
         public void PressA()
         {
-            this.modObj.FireWeapon();
+            if (!Destroyed)
+            {
+                this.modObj.FireWeapon();
+            }
         }
 
         public void PressB()
         {
-            this.firingEngines = true;
+            if (!Destroyed)
+            {
+                this.firingEngines = true;
+            }
         }
 
         public void PressDDown()
@@ -280,12 +290,19 @@ namespace LightGameEngine.Model
 
         public void PressX()
         {
-            Console.WriteLine("Swapping Missile Type");
-            this.modObj.SwapMissileType();
+            if (!Destroyed)
+            {
+                Console.WriteLine("Swapping Missile Type");
+                this.modObj.SwapMissileType();
+            }
         }
 
         public void PressY()
         {
+            if (!Destroyed)
+            {
+                modObj.DetonateMissilesFired();
+            }
         }
 
         public void ReleaseA()
@@ -294,7 +311,10 @@ namespace LightGameEngine.Model
 
         public void ReleaseB()
         {
-            this.firingEngines = false;
+            if (!Destroyed)
+            {
+                this.firingEngines = false;
+            }
         }
 
         public void ReleaseDDown()
@@ -327,6 +347,11 @@ namespace LightGameEngine.Model
 
         public void ReleaseY()
         {
+        }
+
+        public override string ToString()
+        {
+            return "Controllable Object:{Minimum Angle Size:\"" + ANGLE_MOVE + "\", Firing Engines:\"" + firingEngines + "\"," + modObj.ToString() + "}";
         }
 
         public bool EqualsOtherObject(IModelObject other)

@@ -17,11 +17,25 @@ namespace GeometryLibrary
 
         public Frustum(Angle fovy, double aspect, double near, double far)
         {
-            this.viewMatrix = Matrix4d.CreatePerspectiveFieldOfView(fovy.Radians, aspect, near, far);
             this.fovy = fovy;
             this.aspect = aspect;
             this.near = near;
             this.far = far;
+            updateViewMatrix();
+        }
+
+        public double Aspect
+        {
+            set
+            {
+                aspect = value;
+
+            }
+        }
+
+        private void updateViewMatrix()
+        {
+            viewMatrix = Matrix4d.CreatePerspectiveFieldOfView(fovy.Radians, aspect, near, far);
         }
 
         public Matrix4d Matrix
@@ -31,5 +45,20 @@ namespace GeometryLibrary
                 return this.viewMatrix;
             }
         }
+
+        public Angle FofViewY
+        {
+            get
+            {
+                return fovy;
+            }
+            set
+            {
+                Console.WriteLine("New Angle: " + value.Degrees + " Degrees");
+                fovy = value;
+                updateViewMatrix();
+            }
+        }
+
     }
 }

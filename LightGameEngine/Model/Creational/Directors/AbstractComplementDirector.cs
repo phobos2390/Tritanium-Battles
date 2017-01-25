@@ -74,6 +74,33 @@ namespace LightGameEngine.Model
             return complement;
         }
 
+        protected AbstractMissileDirector createMissileDirector(MissileSpecification specs, IList<MissileHardPoint> hardPoints)
+        {
+            switch (specs.MissileType)
+            {
+                case "high":
+                    return new HighMissileDirector(containedModel, containedFiredBy, hardPoints[specs.Hardpoint - 1].Location, loader);
+                case "standard":
+                    return new StandardMissileDirector(containedModel, containedFiredBy, hardPoints[specs.Hardpoint - 1].Location, loader);
+                default:
+                    return null;
+            }
+        }
+
+
+        protected IList<MissileArray> CreateComplement(MissileArrayBuilder builder, IList<MissileSpecification> specifications, IList<MissileHardPoint> hardPoints)
+        {
+            builder = CreateMissileArrayBuilder(builder);
+            IList<MissileArray> complement = new List<MissileArray>();
+            foreach(MissileSpecification spec in specifications)
+            {
+                builder.SetMissileDirector(createMissileDirector(spec, hardPoints))
+                    .SetNumberOfMissiles(spec.Count);
+                complement.Add(builder.CreateMissileArray());
+            }
+            return complement;
+        }
+
         public abstract IList<MissileArray> CreateComplement(MissileArrayBuilder builders);
         public abstract IList<MissileArray> CreateComplement();
     }

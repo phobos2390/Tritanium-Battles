@@ -10,13 +10,13 @@ namespace LightGameEngine.Model
     class HighMissileDirector:AbstractMissileDirector
     {
         private static double MISSTHRUST = 1000;
-        private static double MISSFUEL = .25;
+        private static double MISSFUEL = .05;
         private static double HMSSLMASS = .5;
         private static double HMSSLRAD = 20;
         private static double SCALE = 1;
 
-        private static double EXPLOACCEL = 5;
-        private static int EXPLODUR = 420;
+        private static double EXPLOACCEL = 25;
+        private static int EXPLODUR = 3600;
 
         private static string HMSSL = "HighMissile.obj";
         private static string EXPLO = "Explosion.obj";

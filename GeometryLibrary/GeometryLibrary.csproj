@@ -49,6 +49,7 @@
     <Compile Include="FieldOfView.cs" />
     <Compile Include="Frustum.cs" />
     <Compile Include="IIntersectableShape.cs" />
+    <Compile Include="Intersector.cs" />
     <Compile Include="Polygon.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Sphere.cs" />

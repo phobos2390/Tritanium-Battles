@@ -19,7 +19,7 @@ namespace LightGameEngine.Controller
             this.controlled = controlled;
         }
         
-        public void OnUpdateState(int index)
+        public void OnUpdateState(int index, View.View view)
         {
             GamePadState state = GamePad.GetState(index);
             if (!state.Equals(old_state))
@@ -58,7 +58,8 @@ namespace LightGameEngine.Controller
                 }
                 if (state.Buttons.LeftShoulder == ButtonState.Pressed && old_state.Buttons.LeftShoulder != ButtonState.Pressed)
                 {
-                    controlled.PressShoulderLeft();
+//                    controlled.PressShoulderLeft();
+                    view.ZoomOut();
                 }
                 if (state.Buttons.LeftShoulder != ButtonState.Pressed && old_state.Buttons.LeftShoulder == ButtonState.Pressed)
                 {
@@ -66,7 +67,8 @@ namespace LightGameEngine.Controller
                 }
                 if (state.Buttons.RightShoulder == ButtonState.Pressed && old_state.Buttons.RightShoulder != ButtonState.Pressed)
                 {
-                    controlled.PressShoulderRight();
+                    //                    controlled.PressShoulderRight();
+                    view.ZoomIn();
                 }
                 if (state.Buttons.RightShoulder != ButtonState.Pressed && old_state.Buttons.RightShoulder == ButtonState.Pressed)
                 {

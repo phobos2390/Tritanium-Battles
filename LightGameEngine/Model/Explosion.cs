@@ -57,7 +57,7 @@ namespace LightGameEngine.Model
         {
             get
             {
-                return scale;
+                return modobj.Scale;
             }
         }
 
@@ -128,7 +128,7 @@ namespace LightGameEngine.Model
         {
             get
             {
-                return modobj.RadiusSquared;
+                return scale * scale;
             }
         }
 
@@ -143,9 +143,11 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
+            modobj.OnUpdate(e);
             ++currentStage;
-            scaleVelocity += scaleAcceleration;
-            scale += scaleAcceleration;
+            scale += scaleVelocity * e.Time + .5 * scaleAcceleration * e.Time * e.Time;
+            scaleVelocity += scaleAcceleration * e.Time;
+            //Console.WriteLine("Current State: {Velocity:(" + Velocity.X + "," + Velocity.Y + "," + Velocity.Z + "), Position:(" + Position.X + "," + Position.Y + "," + Position.Z + "), Scale: " + Scale + ",Radius Squared: " + RadiusSquared + "}");
         }
     }
 }

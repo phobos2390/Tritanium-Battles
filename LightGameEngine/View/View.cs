@@ -40,6 +40,7 @@ namespace LightGameEngine.View
         private KeyboardController keyboardController;
         private ControllableObject mainObject;
         private int gamePadIndex;
+        private double crosshairSize;
 
         public void OnShipSight(object sender, OnSightEventArgs e)
         {
@@ -61,6 +62,8 @@ namespace LightGameEngine.View
             this.viewFrustum = viewFrustum;
             VSync = VSyncMode.On;
             this.position = Vector3d.Zero;
+
+            crosshairSize = .125;
 
             font = initFont();
         }
@@ -101,7 +104,10 @@ namespace LightGameEngine.View
             GL.Enable(EnableCap.PolygonSmooth);
 
             GL.Viewport(ClientRectangle.X, ClientRectangle.Y, ClientRectangle.Width, ClientRectangle.Height);
-
+            if (ClientRectangle.Height > 0)
+            {
+                viewFrustum.Aspect = ClientRectangle.Width / ClientRectangle.Height;
+            }
             Matrix4d viewMatrix = viewFrustum.Matrix;
 
             GL.MatrixMode(MatrixMode.Projection);
@@ -113,8 +119,8 @@ namespace LightGameEngine.View
             base.OnUpdateFrame(e);
 
             this.physics.OnUpdateFrame(e);
-            this.gamePadController.OnUpdateState(this.gamePadIndex);
-            this.keyboardController.OnUpdateState();
+            this.gamePadController.OnUpdateState(this.gamePadIndex,this);
+            this.keyboardController.OnUpdateState(this);
 
             camOrientation = mainObject.Orientation;
 
@@ -127,16 +133,16 @@ namespace LightGameEngine.View
 
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-            if (this.model.Objects.Count <= 1)
+            if (this.mainObject.Destroyed)
             {
                 QFont.Begin();
-                font.Print("Nobody Else is Here", new Vector2(Width / 2, Height / 2));
+                font.Print("Game Over", new Vector2((float).8 * ClientRectangle.Width /2, (float).8 * ClientRectangle.Height /2));
                 QFont.End();
             }
-            if(this.mainObject.Destroyed)
+            else if (this.model.Objects.Count <= 1)
             {
                 QFont.Begin();
-                font.Print("Game Over", new Vector2(Width / 2, Height / 2));
+                font.Print("Last Person Standing", new Vector2((float).8 * ClientRectangle.Width / 2, (float).8 * ClientRectangle.Height / 2));
                 QFont.End();
             }
             else
@@ -188,18 +194,23 @@ namespace LightGameEngine.View
                     GL.Color3(Color.Blue);
                 }
 
-                GL.Vertex3(new Vector3d(.5, 0, -2));
-                GL.Vertex3(new Vector3d(.25, 0, -2));
+                GL.Vertex3(new Vector3d(4 * crosshairSize, 0, -2));
+                GL.Vertex3(new Vector3d(2 * crosshairSize, 0, -2));
 
-                GL.Vertex3(new Vector3d(-.5, 0, -2));
-                GL.Vertex3(new Vector3d(-.25, 0, -2));
+                GL.Vertex3(new Vector3d(-4 * crosshairSize, 0, -2));
+                GL.Vertex3(new Vector3d(-2 * crosshairSize, 0, -2));
 
-                GL.Vertex3(new Vector3d(0, .5, -2));
-                GL.Vertex3(new Vector3d(0, .25, -2));
+                GL.Vertex3(new Vector3d(0, 4 * crosshairSize, -2));
+                GL.Vertex3(new Vector3d(0, 2 * crosshairSize, -2));
 
-                GL.Vertex3(new Vector3d(0, -.5, -2));
-                GL.Vertex3(new Vector3d(0, -.25, -2));
+                GL.Vertex3(new Vector3d(0, -4 * crosshairSize, -2));
+                GL.Vertex3(new Vector3d(0, -2 * crosshairSize, -2));
 
+                GL.Vertex3(new Vector3d(crosshairSize, crosshairSize, -2));
+                GL.Vertex3(new Vector3d(-crosshairSize, -crosshairSize, -2));
+
+                GL.Vertex3(new Vector3d(crosshairSize, -crosshairSize, -2));
+                GL.Vertex3(new Vector3d(-crosshairSize, crosshairSize, -2));
 
                 GL.End();
 
@@ -227,6 +238,46 @@ namespace LightGameEngine.View
             {
                 this.position = value;
             }
+        }
+
+        public void ZoomIn()
+        {
+            Console.WriteLine("Zooming in");
+            Angle fovy = viewFrustum.FofViewY;
+            if (fovy.Degrees > .5)
+            {
+                fovy.Divide(1.25);
+            }
+            else
+            {
+                fovy.Degrees = .5;
+            }
+            viewFrustum.FofViewY = fovy;
+            refreshViewMatrix();
+        }
+
+        public void ZoomOut()
+        {
+            Console.WriteLine("Zooming Out");
+            Angle fovy = viewFrustum.FofViewY;
+            if (fovy.Degrees < 90)
+            {
+                fovy.Multiply(1.25);
+            }
+            else
+            {
+                fovy.Degrees = 90;
+            }
+            viewFrustum.FofViewY = fovy;
+            refreshViewMatrix();
+        }
+
+        private void refreshViewMatrix()
+        {
+            Matrix4d viewMatrix = viewFrustum.Matrix;
+
+            GL.MatrixMode(MatrixMode.Projection);
+            GL.LoadMatrix(ref viewMatrix);
         }
     }
 }

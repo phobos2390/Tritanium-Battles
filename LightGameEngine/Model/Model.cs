@@ -52,11 +52,35 @@ namespace LightGameEngine.Model
             {
                 objects.Add(addedObjects[i]);
             }
+            for (int i = objects.Count - 1; i >= 0; --i)
+            {
+                if (objects[i].Destroyed)
+                {
+                    objects.RemoveAt(i);
+                }
+            }
+        }
+
+        public void ExplodeMissilesFiredByShip(ShipObject ship)
+        {
+            modifiable = false;
+            foreach(IModelObject modObj in objects)
+            {
+                if (modObj is Missile)
+                {
+                    Missile missile = (Missile)modObj;
+                    if (missile.FiredBy.EqualsOtherObject(ship))
+                    {
+                        missile.Destroy(missile);
+                    }
+                }
+            }
+            modifiable = true;
             for (int i = this.objects.Count - 1; i >= 0; --i)
             {
-                if (this.objects[i].Destroyed)
+                if (objects[i].Destroyed)
                 {
-                    this.objects.RemoveAt(i);
+                    objects.RemoveAt(i);
                 }
             }
         }

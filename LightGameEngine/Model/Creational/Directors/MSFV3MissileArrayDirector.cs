@@ -11,8 +11,8 @@ namespace LightGameEngine.Model
     {
         private const double XVAL = 2;
         private const double YVAL = 1.67432;
-        private static int NUM_OF_MISSILES = 45;
-        private static int NUM_OF_HIGH = 4;
+        private static int NUM_OF_MISSILES = 20;
+        private static int NUM_OF_HIGH = 10;
 
         IList<Vector3d> offsets;
 

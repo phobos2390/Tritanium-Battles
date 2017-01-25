@@ -196,7 +196,7 @@ namespace LightGameEngine.Model
         {
             get
             {
-                return radiusSquared;
+                return radiusSquared * scale * scale;
             }
         }
 

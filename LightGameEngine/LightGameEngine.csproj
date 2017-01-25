@@ -70,6 +70,10 @@
     <Compile Include="Model\Creational\Builders\ComputerControlledOpponentBuilder.cs" />
     <Compile Include="Model\Creational\Builders\ComputerStateMachineBuilder.cs" />
     <Compile Include="Model\Creational\Directors\ExplosionBuilder.cs" />
+    <Compile Include="Model\Creational\Directors\JSonComplementDirector.cs" />
+    <Compile Include="Model\Creational\Directors\JSonShipDirector.cs" />
+    <Compile Include="Model\Creational\Directors\MissileHardPoints.cs" />
+    <Compile Include="Model\Creational\Directors\MissileSpecification.cs" />
     <Compile Include="Model\Explosion.cs" />
     <Compile Include="Model\FightingState.cs" />
     <Compile Include="Model\Creational\Directors\HighMissileDirector.cs" />

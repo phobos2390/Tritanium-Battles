@@ -139,5 +139,15 @@ namespace GeometryLibrary
             Vector3d vec = vector.Normalized();
             return Tuple.Create<Angle,Angle>(Angle.ArcSine(vec.X,1), Angle.ArcCosine(-vec.Z, Math.Sqrt(1 - vec.X * vec.X)));
         }
+
+        public void Divide(double scalar)
+        {
+            Degrees = degrees / scalar;
+        }
+
+        public void Multiply(double scalar)
+        {
+            Degrees = degrees * scalar;
+        }
     }
 }

@@ -18,7 +18,7 @@ namespace LightGameEngine
             this.controlled = controlled;
         }
 
-        public void OnUpdateState()
+        public void OnUpdateState(View.View view)
         {
             KeyboardState state = Keyboard.GetState();
             if (!state.Equals(old_state))
@@ -47,13 +47,21 @@ namespace LightGameEngine
                 {
                     controlled.ReleaseX();
                 }
-                if (state[Key.J] && !old_state[Key.J])
+                if (state[Key.I] && !old_state[Key.I])
                 {
                     controlled.PressY();
                 }
-                if (!state[Key.J] && old_state[Key.J])
+                if (!state[Key.I] && old_state[Key.I])
                 {
                     controlled.ReleaseY();
+                }
+                if (state[Key.KeypadPlus])
+                {
+                    view.ZoomIn();
+                }
+                if (state[Key.KeypadSubtract])
+                {
+                    view.ZoomOut();
                 }
                 // Update state for the next frame
                 old_state = state;

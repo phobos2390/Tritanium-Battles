@@ -15,6 +15,8 @@ namespace LightGameEngine.Model
     {
         public event OnSightHandler OnSight;
 
+        private const int NUMBER_OF_DISTINCT_TYPES_OF_MISSILES = 2;
+
         private Alignment alignment;
         private IList<MissileArray> complement;
         private int currentFireMode;
@@ -25,11 +27,13 @@ namespace LightGameEngine.Model
         private double fuel;
         private bool firingEngines;
         private Model model;
+        private int numberOfMissileHardpoints;
 
         public event OnDeathHandler OnDeath;
 
         public ShipObject(double thrust, double fuel, IList<MissileArray> complement, IModelObject modObj, Model model, Alignment alignment)
         {
+            numberOfMissileHardpoints = complement.Count / NUMBER_OF_DISTINCT_TYPES_OF_MISSILES;
             currentFireMode = 0;
             missileType = 0;
             this.thrust = thrust;
@@ -193,14 +197,19 @@ namespace LightGameEngine.Model
 
         public void SwapMissileType()
         {
-            missileType = (missileType + 1) % 2;
+            missileType = (missileType + 1) % NUMBER_OF_DISTINCT_TYPES_OF_MISSILES;
+        }
+
+        public void DetonateMissilesFired()
+        {
+            model.ExplodeMissilesFiredByShip(this);
         }
 
         public void FireWeapon()
         {
-            int curIndex = this.missileType * 2 + this.currentFireMode;
-            currentFireMode = (currentFireMode + 1) % 2;
-            this.complement[curIndex].Fire();
+            int curIndex = missileType * numberOfMissileHardpoints + currentFireMode;
+            currentFireMode = (currentFireMode + 1) % numberOfMissileHardpoints;
+            complement[curIndex].Fire();
         }
 
         public void FireEngines()
@@ -251,12 +260,26 @@ namespace LightGameEngine.Model
 
         public void Destroy(IModelObject destroyer)
         {
-            modObj.Destroy(destroyer);
+            if(destroyer is Missile && !EqualsOtherObject(((Missile)destroyer).FiredBy))
+            {
+                OnDeath?.Invoke(this, new OnDeathEventArgs(this, destroyer));
+                modObj.Destroy(destroyer);
+            }
         }
 
         public bool EqualsOtherObject(IModelObject other)
         {
             return other.EqualsOtherObject(modObj);
+        }
+
+        public override string ToString()
+        {
+            string retVal = "Ship Object:{Alignment:\"" + alignment.ToString() + "\",Firing Engines:\"" + firingEngines + "\",Remaining Fuel:\"" + fuel + "\",Thrust:\"" + thrust + "\",Missiles:[\"";
+            foreach(MissileArray array in complement)
+            {
+                retVal += array.ToString() + ",";
+            }
+            return retVal + "]}";
         }
     }
 }

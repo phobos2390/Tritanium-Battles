@@ -12,7 +12,7 @@ namespace LightGameEngine.Model
 {
     public class Missile:IModelObject
     {
-        private const double TIMEDELAY = 20;
+        private const double TIMEDELAY = 250;
 
         private IModelObject modObj;
         private IModelObject firedBy;
@@ -123,6 +123,22 @@ namespace LightGameEngine.Model
             }
         }
 
+        public double BlastRadius
+        {
+            get
+            {
+                return blastRadius;
+            }
+        }
+
+        public IModelObject FiredBy
+        {
+            get
+            {
+                return firedBy;
+            }
+        }
+
         public double RadiusSquared
         {
             get
@@ -146,42 +162,42 @@ namespace LightGameEngine.Model
 
         public void OnUpdate(FrameEventArgs e)
         {
-            Vector3d initial = this.Position;
+            //Vector3d initial = this.Position;
 
             modObj.OnUpdate(e);
 
-            bool explode = false;
+            //bool explode = false;
 
-            foreach (IModelObject obj in this.model.Objects)
-            {
-                if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj) && !(obj is Missile))
-                {
-                    Vector3d ray = obj.Position - initial;
-                    Vector3d dist = this.Position - initial;
-                    Vector3d revDist = this.Position - obj.Position;
-                    if(Sphere.PointInSphere(obj.Position, this.Position, this.radiusSquare))
-                    {
-                        Console.WriteLine("1Destroying object");
-                        obj.Destroy(this);
-                        explode = true;
-                    }
-                    else if (Vector3d.Dot(ray, dist) > 0 && Vector3d.Dot(revDist, dist) > 0)
-                    {
-                        Console.WriteLine("Might have passed it");
-                        double vxdLength = Vector3d.Cross(ray, dist).LengthSquared;
-                        if (vxdLength <= this.radiusSquare * dist.LengthSquared)
-                        {
-                            Console.WriteLine("2Destroying object");
-                            obj.Destroy(this);
-                            explode = true;
-                        }
-                    }
-                }
-            }
-            if(explode)
-            {
-                Destroy(this);
-            }
+            //foreach (IModelObject obj in this.model.Objects)
+            //{
+            //    if (!this.EqualsOtherObject(obj) && !this.firedBy.EqualsOtherObject(obj) && !(obj is Missile))
+            //    {
+            //        Vector3d ray = obj.Position - initial;
+            //        Vector3d dist = this.Position - initial;
+            //        Vector3d revDist = this.Position - obj.Position;
+            //        if(Sphere.PointInSphere(obj.Position, this.Position, this.radiusSquare))
+            //        {
+            //            Console.WriteLine("1Destroying object");
+            //            obj.Destroy(this);
+            //            explode = true;
+            //        }
+            //        else if (Vector3d.Dot(ray, dist) > 0 && Vector3d.Dot(revDist, dist) > 0)
+            //        {
+            //            Console.WriteLine("Might have passed it");
+            //            double vxdLength = Vector3d.Cross(ray, dist).LengthSquared;
+            //            if (vxdLength <= this.radiusSquare * dist.LengthSquared)
+            //            {
+            //                Console.WriteLine("2Destroying object");
+            //                obj.Destroy(this);
+            //                explode = true;
+            //            }
+            //        }
+            //    }
+            //}
+            //if(explode)
+            //{
+            //    Destroy(this);
+            //}
             timeLeft -= e.Time;
             if(timeLeft <= 0)
             {
@@ -200,8 +216,8 @@ namespace LightGameEngine.Model
             {
                 modObj.Destroy(destroyer);
                 OnDeath(this, new OnDeathEventArgs(this, destroyer));
-                explObj.Position = Position;
-                explObj.Velocity = Velocity;
+                explObj.Position = new Vector3d(Position.X, Position.Y, Position.Z);
+                explObj.Velocity = new Vector3d(Velocity.X, Velocity.Y, Velocity.Z);
                 model.AddModelObject(explObj);
             }
         }
